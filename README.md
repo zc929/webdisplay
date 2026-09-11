@@ -1,4 +1,4 @@
-# WebDisplay 网页展示程序 2.4.0
+# WebDisplay 网页展示工具 2.4.0
 
 基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.4.0 新增默认关闭的“忽略 SSL/TLS 证书错误”选项，并保留网页缩放和滚动条开关。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
 
@@ -19,6 +19,8 @@
 首次运行时打开设置窗口。忽略 SSL/TLS 证书错误、开机启动、定时重启和 Windows 自动登录默认关闭。展示设置与开机启动随“保存”应用；定时重启和 Windows 自动登录使用各自的管理员操作按钮立即应用，之后取消设置窗口不会撤销已经应用的系统操作。
 
 ## 安装与运行
+
+下载最新版本：[安装包与便携版](https://github.com/zc929/webdisplay/releases/latest)。
 
 推荐运行安装包 `dist\WebDisplay-Setup-2.4.0-x64.exe`。默认只为当前 Windows 用户安装到：
 
