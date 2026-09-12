@@ -20,7 +20,7 @@
 
 ## 安装与运行
 
-下载最新版本：[安装包与便携版](https://github.com/zc929/webdisplay/releases/latest)。
+下载最新版本：[安装包与便携版](https://github.com/zc929/webdisplay/releases/latest)。 [查看历史版本](https://github.com/zc929/webdisplay/releases)。
 
 推荐运行安装包 `dist\WebDisplay-Setup-2.4.0-x64.exe`。默认只为当前 Windows 用户安装到：
 
