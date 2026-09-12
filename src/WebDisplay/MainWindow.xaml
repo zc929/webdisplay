@@ -1,0 +1,19 @@
+<Window x:Class="WebDisplay.MainWindow" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" Title="网页展示器" Width="1200" Height="800" MinWidth="640" MinHeight="420" Background="#F3F5F9" Icon="Assets/app.ico" WindowStartupLocation="CenterScreen" PreviewKeyDown="OnPreviewKeyDown">
+  <Window.Resources>
+    <Style TargetType="Button"><Setter Property="Padding" Value="14,7"/><Setter Property="Margin" Value="4,0"/><Setter Property="Background" Value="White"/><Setter Property="BorderBrush" Value="#CBD5E1"/><Setter Property="Foreground" Value="#243550"/><Setter Property="Cursor" Value="Hand"/></Style>
+  </Window.Resources>
+  <Grid>
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <Border x:Name="Toolbar" Background="White" BorderBrush="#DCE2EB" BorderThickness="0,0,0,1" Padding="16,12">
+      <DockPanel>
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Right"><Button Content="刷新" Click="RefreshClick" ToolTip="Ctrl+R"/><Button Content="全屏" Click="FullscreenClick" ToolTip="F11 / Esc"/><Button Content="设置" Click="SettingsClick" ToolTip="Ctrl+,"/></StackPanel>
+        <StackPanel VerticalAlignment="Center"><TextBlock Text="网页展示器" FontSize="19" FontWeight="SemiBold" Foreground="#16253D"/><TextBlock x:Name="AddressText" FontSize="12" Foreground="#64748B" MaxWidth="700" TextTrimming="CharacterEllipsis"/></StackPanel>
+      </DockPanel>
+    </Border>
+    <Border x:Name="RecoveryBanner" Grid.Row="1" Background="#FFF4DA" Padding="16,10" Visibility="Collapsed">
+      <DockPanel><Button DockPanel.Dock="Right" Content="立即重试" Click="RefreshClick"/><TextBlock x:Name="RecoveryText" Foreground="#7A5011" VerticalAlignment="Center" TextWrapping="Wrap"/></DockPanel>
+    </Border>
+    <Grid x:Name="BrowserHost" Grid.Row="2" Background="White"/>
+    <Border x:Name="StatusBar" Grid.Row="3" Background="#F3F5F9" Padding="16,8"><DockPanel><TextBlock DockPanel.Dock="Right" Text="F11 全屏  ·  Esc 返回  ·  Ctrl+, 设置" Foreground="#64748B" FontSize="12"/><TextBlock x:Name="StatusText" Text="准备就绪" Foreground="#64748B" FontSize="12"/></DockPanel></Border>
+  </Grid>
+</Window>
