@@ -1,0 +1,8 @@
+{
+  "file": "MicrosoftEdgeWebview2Setup.exe",
+  "source": "https://go.microsoft.com/fwlink/p/?LinkId=2124703",
+  "downloadedOn": "2026-09-09",
+  "publisher": "Microsoft Corporation",
+  "sha256": "17DEBF797A6C737959BC588236E897936FFAC1AF5F7E515E674AB32F9EDFE719",
+  "purpose": "Install Evergreen WebView2 Runtime only if missing. The bootstrapper needs internet access on that target machine."
+}
