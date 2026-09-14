@@ -1,6 +1,6 @@
 # 第三方组件与许可说明
 
-WebDisplay 2.4.0 使用 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2，并使用 Inno Setup 制作当前用户安装包。程序以多文件方式部署，所需运行依赖与程序一起安装到固定目录。
+WebDisplay 2.5.0 使用 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2，并使用 Inno Setup 制作当前用户安装包。程序以多文件方式部署，所需运行依赖与程序一起安装到固定目录。
 
 | 组件 | 本版本用途及许可来源 |
 | --- | --- |
@@ -19,7 +19,11 @@ WebDisplay 2.4.0 使用 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2，并
 
 安装包及源码包还包含微软官方 WebView2 引导安装器；它在需要时下载并安装共享的 Evergreen Runtime。Inno Setup 编译器属于构建工具，未作为 WebDisplay 的日常运行依赖安装到目标电脑。
 
+2.5.0 安装器提供简体中文、繁體中文和 English。新增繁體中文语言文件取自 Inno Setup 官方 `jrsoftware/issrc` 仓库的[固定提交](https://github.com/jrsoftware/issrc/blob/6ef32198ef1f7b7b375cd4b6b90896c2a58eb4c2/Files/Languages/ChineseTraditional.isl)，保留上游翻译和作者注记。来源、文件哈希及对应许可见 `installer/languages/SOURCES.md` 和 `installer/INNO-LICENSE.txt`；英文使用 Inno Setup 随附的 `Default.isl`，既有简体中文文件沿用。
+
 发布包中的 `licenses` 目录提供构建时收集的原始许可及声明；本文件用于定位组件和许可来源，不替代这些原文。Windows 自带 API（任务计划程序、注册表、LSA 和电源管理）由目标系统提供；WebDisplay 使用这些 API 实现系统设置，没有分发 Sysinternals Autologon 工具。
+
+2.5.0 的三语言程序界面使用应用内文字字典；网页静音调用现有 WebView2 SDK 的 `IsMuted` 属性，没有新增第三方运行依赖。静音默认关闭，仅影响本应用网页的声音（包括嵌入内容），不会改变系统或其他应用音量；单独保存静音设置不会刷新网页，刷新和浏览器进程恢复后仍保持选择。
 
 2.4.0 新增的“忽略 SSL/TLS 证书错误”使用现有 WebView2 SDK 的证书错误处理与缓存清除接口，没有新增第三方依赖。此选项默认关闭，仅影响当前应用加载的网页及资源，不修改 Windows 证书信任库。更改并保存会重建网页会话并重新加载；关闭时清除证书放行缓存、恢复校验，同时保留用户配置、cookies 和网站会话数据。
 

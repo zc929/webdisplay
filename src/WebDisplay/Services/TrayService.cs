@@ -11,7 +11,7 @@ public sealed class TrayService : IDisposable
 {
     private const uint CallbackMessage = 0x8000 + 137;
     private const uint FirstCommand = 0x7201;
-    private static readonly string[] Labels = { "显示窗口", "设置", "刷新网页", "切换全屏", "退出程序" };
+    private static readonly string[] LabelKeys = { "显示窗口", "设置", "刷新网页", "切换全屏", "退出程序" };
     private static readonly string[] Shortcuts = { "", "Ctrl+,", "Ctrl+R", "F11", "" };
     private readonly Window _owner;
     private readonly DispatcherQueue _dispatcher;
@@ -59,7 +59,7 @@ public sealed class TrayService : IDisposable
         {
             _retryTimer.Tick -= OnRetry;
             if (_ownsIcon) WindowInteropNative.DestroyIcon(_icon);
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "无法创建通知区域图标的窗口消息处理程序。");
+            throw new Win32Exception(Marshal.GetLastWin32Error(), L.Text("无法创建通知区域图标的窗口消息处理程序。"));
         }
         _subclassInstalled = true;
         _owner.Closed += OnOwnerClosed;
@@ -74,7 +74,7 @@ public sealed class TrayService : IDisposable
         Flags = 0x0001 | 0x0002 | 0x0004 | 0x0080, // MESSAGE, ICON, TIP, SHOWTIP
         CallbackMessage = CallbackMessage,
         Icon = _icon,
-        Tip = "网页展示器 — 双击显示，右键打开菜单",
+        Tip = L.Text("网页展示器 — 双击显示，右键打开菜单"),
         Info = string.Empty,
         InfoTitle = string.Empty,
         Version = 4
@@ -143,7 +143,7 @@ public sealed class TrayService : IDisposable
             catch (Exception ex)
             {
                 AppLog.Write("Tray action: " + ex.GetType().Name);
-                WindowInteropService.ShowMessage(_owner, "操作未完成", ex.Message);
+                WindowInteropService.ShowMessage(_owner, L.Text("操作未完成"), ex.Message);
             }
         });
     }
@@ -168,7 +168,7 @@ public sealed class TrayService : IDisposable
                 Background = background
             };
             TrayNative.SetMenuInfo(_activeMenu, ref menuInfo);
-            for (uint i = 0; i < Labels.Length; i++)
+            for (uint i = 0; i < LabelKeys.Length; i++)
             {
                 var item = new TrayNative.MenuItemInfo
                 {
@@ -177,8 +177,8 @@ public sealed class TrayService : IDisposable
                     Type = 0x00000100,
                     Id = FirstCommand + i,
                     ItemData = new UIntPtr(FirstCommand + i),
-                    TypeData = Labels[i],
-                    TextLength = (uint)Labels[i].Length
+                    TypeData = L.Text(LabelKeys[i]),
+                    TextLength = (uint)L.Text(LabelKeys[i]).Length
                 };
                 TrayNative.InsertMenuItem(_activeMenu, i, true, ref item);
             }
@@ -219,7 +219,7 @@ public sealed class TrayService : IDisposable
             _menuFont = IntPtr.Zero;
             _menuOpen = false;
         }
-        if (selected >= FirstCommand && selected < FirstCommand + Labels.Length)
+        if (selected >= FirstCommand && selected < FirstCommand + LabelKeys.Length)
             QueueAction((int)(selected - FirstCommand));
     }
 
@@ -229,9 +229,9 @@ public sealed class TrayService : IDisposable
     {
         if (!_menuOpen || pointer == IntPtr.Zero) return false;
         TrayNative.MeasureItem item = Marshal.PtrToStructure<TrayNative.MeasureItem>(pointer);
-        if (item.ControlType != 1 || item.ItemId < FirstCommand || item.ItemId >= FirstCommand + Labels.Length)
+        if (item.ControlType != 1 || item.ItemId < FirstCommand || item.ItemId >= FirstCommand + LabelKeys.Length)
             return false;
-        item.Width = (uint)Scale(250);
+        item.Width = (uint)Scale(290);
         item.Height = (uint)Scale(38);
         Marshal.StructureToPtr(item, pointer, false);
         return true;
@@ -242,7 +242,7 @@ public sealed class TrayService : IDisposable
         if (!_menuOpen || pointer == IntPtr.Zero) return false;
         TrayNative.DrawItem item = Marshal.PtrToStructure<TrayNative.DrawItem>(pointer);
         if (item.ControlType != 1 || item.ItemWindow != _activeMenu
-            || item.ItemId < FirstCommand || item.ItemId >= FirstCommand + Labels.Length)
+            || item.ItemId < FirstCommand || item.ItemId >= FirstCommand + LabelKeys.Length)
             return false;
         int index = (int)(item.ItemId - FirstCommand);
         bool selected = (item.State & 0x0001) != 0;
@@ -259,8 +259,10 @@ public sealed class TrayService : IDisposable
             WindowInteropNative.Rect text = item.Rectangle;
             text.Left += Scale(18);
             text.Right -= Scale(18);
+            WindowInteropNative.Rect labelText = text;
+            if (Shortcuts[index].Length > 0) labelText.Right -= Scale(82);
             TrayNative.SetTextColor(item.DeviceContext, foreground);
-            TrayNative.DrawText(item.DeviceContext, Labels[index], -1, ref text, 0x0020 | 0x0004 | 0x0800);
+            TrayNative.DrawText(item.DeviceContext, L.Text(LabelKeys[index]), -1, ref labelText, 0x0020 | 0x0004 | 0x0800 | 0x8000);
             if (Shortcuts[index].Length > 0)
             {
                 TrayNative.SetTextColor(item.DeviceContext, secondary);

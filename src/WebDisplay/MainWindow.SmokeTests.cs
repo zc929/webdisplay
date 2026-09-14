@@ -36,6 +36,7 @@ public sealed partial class MainWindow
             await RunCertificateSmokeChecksAsync();
             await RunScrollbarSmokeChecksAsync();
             await RunZoomSmokeChecksAsync();
+            await RunLanguageAudioSmokeChecksAsync();
             int requests = server.RequestCount;
             _settings.AutoRefreshEnabled = true;
             _refreshAt = DateTimeOffset.Now.AddMilliseconds(200);
@@ -46,6 +47,8 @@ public sealed partial class MainWindow
             _smokeChecks.Add("Saved zoom survives automatic refresh");
             await AssertScrollbarVisibilityAsync(false);
             _smokeChecks.Add("Hidden scrollbars survive automatic refresh");
+            AssertPageMutedForSmoke(true);
+            _smokeChecks.Add("Page mute survives automatic refresh");
             _settings.AutoRefreshEnabled = false;
             requests = server.RequestCount;
             _refreshAt = DateTimeOffset.Now.AddMilliseconds(200);
@@ -63,6 +66,8 @@ public sealed partial class MainWindow
             _smokeChecks.Add("Saved zoom survives network recovery");
             await AssertScrollbarVisibilityAsync(false);
             _smokeChecks.Add("Hidden scrollbars survive network recovery");
+            AssertPageMutedForSmoke(true);
+            _smokeChecks.Add("Page mute survives network recovery");
             _settings = _store.Load();
             var previousBrowser = _browser!;
             using (var process = Process.GetProcessById((int)previousBrowser.CoreWebView2.BrowserProcessId)) process.Kill();
@@ -73,6 +78,8 @@ public sealed partial class MainWindow
             _smokeChecks.Add("Persisted zoom reapplies after browser recreation");
             await AssertScrollbarVisibilityAsync(false);
             _smokeChecks.Add("Persisted scrollbar preference reapplies after browser recreation");
+            AssertPageMutedForSmoke(true);
+            _smokeChecks.Add("Persisted page mute reapplies before loading after browser recreation");
             SetFullscreen(true);
             if (AppWindow.Presenter.Kind != AppWindowPresenterKind.FullScreen || Toolbar.Visibility != Visibility.Collapsed) throw new InvalidOperationException("Fullscreen failed");
             SetFullscreen(false);
@@ -133,6 +140,8 @@ public sealed partial class MainWindow
             themeBox.SelectedIndex = 2;
             dialog.ZoomInputText = "200";
             ((ToggleSwitch)root.FindName("ShowScrollbarsToggle")).IsOn = true;
+            ((ToggleSwitch)root.FindName("MutePageToggle")).IsOn = false;
+            ((ComboBox)root.FindName("LanguageBox")).SelectedIndex = 1;
             ((ToggleSwitch)root.FindName("IgnoreCertificateErrorsToggle")).IsOn = true;
             await Task.Delay(100);
             dialog.Close();
@@ -147,6 +156,9 @@ public sealed partial class MainWindow
             if (_settings.IgnoreCertificateErrors || _store.Load().IgnoreCertificateErrors)
                 throw new InvalidOperationException("Cancelled certificate bypass was applied or saved");
             _smokeChecks.Add("Cancelling certificate changes preserves the strict current and saved policy");
+            AssertPageMutedForSmoke(true);
+            if (!_store.Load().MutePage || _store.Load().Language != "zh-CN" || L.Language != "zh-CN") throw new InvalidOperationException("Cancelled language or audio settings were applied");
+            _smokeChecks.Add("Cancelling language and page audio changes leaves display and saved settings unchanged");
             File.WriteAllText(Path.Combine(_store.DataDirectory, "smoke-test-result.json"), JsonSerializer.Serialize(new { passed = true, framework = "WinUI 3", checks = _smokeChecks }));
             Close();
         }

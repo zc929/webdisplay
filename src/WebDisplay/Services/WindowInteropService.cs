@@ -70,7 +70,7 @@ public static class WindowInteropService
     public static void ShowMessage(Window? owner, string title, string message)
     {
         IntPtr hwnd = owner is null ? IntPtr.Zero : WinRT.Interop.WindowNative.GetWindowHandle(owner);
-        WindowInteropNative.MessageBox(hwnd, message, title, 0x00000010 | 0x00010000);
+        WindowInteropNative.MessageBox(hwnd, L.Text(message), L.Text(title), 0x00000010 | 0x00010000);
     }
 }
 

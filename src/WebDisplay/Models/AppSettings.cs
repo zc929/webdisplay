@@ -1,4 +1,5 @@
 using System;
+using WebDisplay.Services;
 
 namespace WebDisplay.Models;
 
@@ -8,6 +9,8 @@ public sealed class AppSettings
     public int ZoomPercent { get; set; } = 100;
     public bool ShowScrollbars { get; set; } = true;
     public bool IgnoreCertificateErrors { get; set; }
+    public bool MutePage { get; set; }
+    public string Language { get; set; } = "zh-CN";
     public bool AutoRefreshEnabled { get; set; }
     public int RefreshIntervalMinutes { get; set; } = 5;
     public bool AlwaysOnTop { get; set; }
@@ -27,12 +30,14 @@ public sealed class AppSettings
 
     public void Validate()
     {
+        if (Language != "zh-CN" && Language != "zh-TW" && Language != "en-US")
+            throw new ArgumentException(L.Text("界面语言必须为简体中文、繁体中文或英文。"));
         if (ThemePreference != "System" && ThemePreference != "Light" && ThemePreference != "Dark")
-            throw new ArgumentException("界面主题必须为跟随系统、浅色或深色。");
-        if (!IsValidUrl(Url)) throw new ArgumentException("请输入完整的 http:// 或 https:// 网页地址，且不要在网址中包含账号密码。");
+            throw new ArgumentException(L.Text("界面主题必须为跟随系统、浅色或深色。"));
+        if (!IsValidUrl(Url)) throw new ArgumentException(L.Text("请输入完整的 http:// 或 https:// 网页地址，且不要在网址中包含账号密码。"));
         if (ZoomPercent < 25 || ZoomPercent > 500)
-            throw new ArgumentException("网页缩放比例应为 25 到 500 的整数百分比。");
+            throw new ArgumentException(L.Text("网页缩放比例应为 25 到 500 的整数百分比。"));
         if (RefreshIntervalMinutes < 1 || RefreshIntervalMinutes > 10080)
-            throw new ArgumentException("刷新间隔应为 1 到 10080 分钟。");
+            throw new ArgumentException(L.Text("刷新间隔应为 1 到 10080 分钟。"));
     }
 }

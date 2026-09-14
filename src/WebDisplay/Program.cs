@@ -26,9 +26,10 @@ internal static class Program
             AppLog.Initialize(store.DataDirectory);
             if (Array.IndexOf(args, "--self-test") >= 0) return SelfTests.Run(store.DataDirectory);
             bool smoke = Array.IndexOf(args, "--smoke-test") >= 0;
+            L.SetLanguage(smoke ? "zh-CN" : store.Load().Language);
             string key = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(store.DataDirectory.ToUpperInvariant())))[..20];
             using var mutex = new Mutex(true, @"Local\WebDisplay-" + key, out bool ownsMutex);
-            if (!ownsMutex) { WindowInteropService.ShowMessage(null, "网页展示器", "网页展示器已经运行，请从任务栏或系统托盘打开设置。"); return 0; }
+            if (!ownsMutex) { WindowInteropService.ShowMessage(null, L.Text("网页展示器"), L.Text("网页展示器已经运行，请从任务栏或系统托盘打开设置。")); return 0; }
             try
             {
                 WinRT.ComWrappersSupport.InitializeComWrappers();
@@ -44,7 +45,7 @@ internal static class Program
         catch (Exception ex)
         {
             AppLog.Write("Startup failed: " + ex);
-            WindowInteropService.ShowMessage(null, "网页展示器", "程序启动失败：" + ex.Message);
+            WindowInteropService.ShowMessage(null, L.Text("网页展示器"), L.Format("程序启动失败：{0}", ex.Message));
             return 1;
         }
     }

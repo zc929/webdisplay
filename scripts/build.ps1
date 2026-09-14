@@ -26,6 +26,46 @@ function Reset-WorkspaceDirectory([string]$Path) {
     New-Item -ItemType Directory -Force -Path $absolutePath | Out-Null
 }
 
+function Copy-OptionalReadmeAssets([string]$Destination) {
+    $destinationRoot = [IO.Path]::GetFullPath($Destination).TrimEnd('\', '/')
+    $rootPrefix = $projectRoot + [IO.Path]::DirectorySeparatorChar
+    if (-not $destinationRoot.StartsWith($rootPrefix, [StringComparison]::OrdinalIgnoreCase)) {
+        throw "Refusing to copy documentation outside the workspace: $destinationRoot"
+    }
+    $assetFiles = @()
+    $englishReadme = Join-Path $projectRoot 'README.en.md'
+    if (Test-Path -LiteralPath $englishReadme -PathType Leaf) {
+        $assetFiles += Get-Item -LiteralPath $englishReadme -Force
+    }
+    $imagesDirectory = Join-Path $projectRoot 'docs\images'
+    if (Test-Path -LiteralPath $imagesDirectory -PathType Container) {
+        foreach ($assetDirectory in @((Join-Path $projectRoot 'docs'), $imagesDirectory)) {
+            if (((Get-Item -LiteralPath $assetDirectory -Force).Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "Refusing to copy documentation through a junction or symbolic link: $assetDirectory"
+            }
+        }
+        $imageEntries = @(Get-ChildItem -LiteralPath $imagesDirectory -Recurse -Force)
+        foreach ($entry in $imageEntries) {
+            if (($entry.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+                throw "Refusing to copy a documentation junction or symbolic link: $($entry.FullName)"
+            }
+        }
+        $assetFiles += @($imageEntries | Where-Object { -not $_.PSIsContainer })
+    }
+    foreach ($assetFile in $assetFiles) {
+        if (($assetFile.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) {
+            throw "Refusing to copy a documentation symbolic link: $($assetFile.FullName)"
+        }
+        $relativePath = [IO.Path]::GetRelativePath($projectRoot, $assetFile.FullName)
+        $assetDestination = [IO.Path]::GetFullPath((Join-Path $destinationRoot $relativePath))
+        if (-not $assetDestination.StartsWith(($destinationRoot + [IO.Path]::DirectorySeparatorChar), [StringComparison]::OrdinalIgnoreCase)) {
+            throw "Invalid documentation asset path: $relativePath"
+        }
+        New-Item -ItemType Directory -Force -Path (Split-Path -Parent $assetDestination) | Out-Null
+        Copy-Item -LiteralPath $assetFile.FullName -Destination $assetDestination -Force
+    }
+}
+
 function Get-ExactDownloadVersion([string]$Range) {
     if ($Range -match '^\[([^,\[\]]+),\s*([^,\[\]]+)\]$') {
         $lower = $Matches[1].Trim()
@@ -132,6 +172,7 @@ Reset-WorkspaceDirectory $outputDir
 & $dotnetExe publish $projectFile -c Release -r win-x64 --self-contained true -o $outputDir -p:Platform=x64 -p:PublishSingleFile=false -p:DebugType=None -p:DebugSymbols=false
 if ($LASTEXITCODE -ne 0) { throw 'Publish failed' }
 Copy-Item -LiteralPath (Join-Path $projectRoot 'README.md') -Destination $outputDir -Force
+Copy-OptionalReadmeAssets $outputDir
 foreach ($referenceDoc in Get-ChildItem -LiteralPath $outputDir -Filter 'Microsoft.Web.WebView2.*.xml' -File) {
     Remove-Item -LiteralPath $referenceDoc.FullName
 }
@@ -177,6 +218,7 @@ foreach ($sourceDocument in @('README.md','VALIDATION.md','THIRD-PARTY-NOTICES.m
     $documentPath = Join-Path $projectRoot $sourceDocument
     if (Test-Path -LiteralPath $documentPath) { Copy-Item -LiteralPath $documentPath -Destination $sourceDir -Force }
 }
+Copy-OptionalReadmeAssets $sourceDir
 Compress-Archive -Path $sourceDir -DestinationPath (Join-Path $projectRoot 'dist\WebDisplay-WinUI3-source.zip') -Force
 Get-FileHash -LiteralPath (Join-Path $outputDir 'WebDisplay.exe') -Algorithm SHA256 | Format-List
 Write-Output "Published: $outputDir"

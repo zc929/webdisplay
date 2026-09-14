@@ -38,6 +38,8 @@ public sealed partial class MainWindow : Window
     private ulong _navigationId;
     private DateTimeOffset? _retryAt, _refreshAt, _navigationStarted;
     private string _failureText = "";
+    private string _failureFormat = "";
+    private object[] _failureArguments = Array.Empty<object>();
     private RectInt32 _restoreBounds;
     private bool _restoreMaximized;
     private OverlappedPresenter? _normalPresenter;
@@ -47,7 +49,9 @@ public sealed partial class MainWindow : Window
     {
         _store = store; _smoke = smoke; _settings = store.Load();
         if (smoke) _settings = new AppSettings { FullScreen = false, PreventSleep = false };
+        L.SetLanguage(_settings.Language);
         InitializeComponent();
+        ApplyInterfaceLanguage();
         WindowInteropService.Initialize(this, 1200, 800);
         _theme = new ThemeService(this, RootGrid, _settings.ThemePreference);
         _theme.ThemeChanged += (_, _) => ApplyBrowserTheme();
@@ -78,11 +82,10 @@ public sealed partial class MainWindow : Window
         _started = true;
         try
         {
-            _tray = new TrayService(this, ShowFromTray, () => _ = ShowSettingsAsync(),
-                () => _ = RefreshAsync(), ToggleFullscreen, RequestClose, () => _theme.EffectiveTheme == ElementTheme.Dark);
+            CreateTray();
             if (!_smoke && (!_store.HasSettings || _store.LoadWarning != null))
             {
-                if (_store.LoadWarning != null) await ShowNoticeAsync("设置提示", _store.LoadWarning);
+                if (_store.LoadWarning != null) await ShowNoticeAsync(L.Text("设置提示"), _store.LoadWarning);
                 if (!await ShowSettingsAsync()) { Close(); return; }
             }
             ApplyDisplaySettings();
@@ -94,7 +97,7 @@ public sealed partial class MainWindow : Window
         {
             AppLog.Write("Initialization failed: " + ex);
             if (_smoke) { WriteSmokeFailure(ex); Close(); }
-            else await ShowNoticeAsync("启动未完成", ex.Message);
+            else await ShowNoticeAsync(L.Text("启动未完成"), ex.Message);
         }
     }
 
@@ -124,7 +127,7 @@ public sealed partial class MainWindow : Window
             _browser = browser;
             ApplyBrowserTheme();
             BrowserHost.Children.Add(browser);
-            StatusText.Text = "正在初始化网页引擎…";
+            StatusText.Text = L.Text("正在初始化网页引擎…");
             var environment = await CoreWebView2Environment.CreateWithOptionsAsync(null, Path.Combine(_store.DataDirectory, "BrowserProfile"), null)
                 .AsTask().WaitAsync(TimeSpan.FromSeconds(30));
             if (_closing || _browser != browser) return;
@@ -137,6 +140,8 @@ public sealed partial class MainWindow : Window
             browser.CoreWebView2.Settings.AreDefaultContextMenusEnabled = false;
             browser.CoreWebView2.Settings.IsStatusBarEnabled = false;
             browser.CoreWebView2.Settings.IsZoomControlEnabled = false;
+            // Mute the whole WebView before the first page can produce audio.
+            ApplyBrowserAudio();
             browser.CoreWebView2.ServerCertificateErrorDetected += (_, args) =>
             {
                 args.Action = !_closing && !_certificatePolicyChanging && _browser == browser && _settings.IgnoreCertificateErrors
@@ -158,7 +163,7 @@ public sealed partial class MainWindow : Window
                 if (!AppSettings.IsValidUrl(args.Uri) && args.Uri != "about:blank") { args.Cancel = true; return; }
                 _navigationId = args.NavigationId;
                 _loading = true; _navigationStarted = DateTimeOffset.Now;
-                StatusText.Text = "正在加载网页…";
+                StatusText.Text = L.Text("正在加载网页…");
             };
             browser.CoreWebView2.NavigationCompleted += async (_, args) =>
             {
@@ -184,7 +189,7 @@ public sealed partial class MainWindow : Window
                     SetReadyStatus();
                 }
                 else if (args.WebErrorStatus != CoreWebView2WebErrorStatus.OperationCanceled)
-                    ScheduleRetry("网页加载失败（" + args.WebErrorStatus + "）");
+                    ScheduleRetry("网页加载失败（{0}）", args.WebErrorStatus);
             };
             browser.CoreWebView2.ProcessFailed += (_, args) =>
             {
@@ -225,9 +230,9 @@ public sealed partial class MainWindow : Window
             {
                 var dialog = new ContentDialog
                 {
-                    XamlRoot = RootGrid.XamlRoot, Title = "需要网页运行组件",
-                    Content = "运行网页展示器需要 Microsoft Edge WebView2 Runtime。安装后返回程序点击“立即重试”。",
-                    PrimaryButtonText = "打开微软下载页", CloseButtonText = "稍后",
+                    XamlRoot = RootGrid.XamlRoot, Title = L.Text("需要网页运行组件"),
+                    Content = L.Text("运行网页展示器需要 Microsoft Edge WebView2 Runtime。安装后返回程序点击“立即重试”。"),
+                    PrimaryButtonText = L.Text("打开微软下载页"), CloseButtonText = L.Text("稍后"),
                     RequestedTheme = RootGrid.ActualTheme
                 };
                 if (await dialog.ShowAsync() == ContentDialogResult.Primary)
@@ -332,20 +337,22 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void ScheduleRetry(string message)
+    private void ScheduleRetry(string message, params object[] arguments)
     {
         _loading = false; _navigationStarted = null;
-        _failureText = message;
+        _failureFormat = message;
+        _failureArguments = arguments;
+        _failureText = L.Format(message, arguments);
         _retryAt = DateTimeOffset.Now + _recovery.NextDelay();
         RecoveryBanner.IsOpen = true;
         UpdateRetryText();
-        AppLog.Write(message);
+        AppLog.Write(_failureText);
     }
 
     private void UpdateRetryText()
     {
-        RecoveryBanner.Message = _runtimeMissing ? _failureText : $"{_failureText} · {Math.Max(0, Math.Ceiling(((_retryAt ?? DateTimeOffset.Now) - DateTimeOffset.Now).TotalSeconds))} 秒后重试";
-        StatusText.Text = "等待恢复";
+        RecoveryBanner.Message = _runtimeMissing ? _failureText : L.Format("{0} · {1} 秒后重试", _failureText, Math.Max(0, Math.Ceiling(((_retryAt ?? DateTimeOffset.Now) - DateTimeOffset.Now).TotalSeconds)));
+        StatusText.Text = L.Text("等待恢复");
     }
 
     private async void OnTick(object? sender, object e)
@@ -407,6 +414,13 @@ public sealed partial class MainWindow : Window
             bool changedCertificatePolicy = next.IgnoreCertificateErrors != _settings.IgnoreCertificateErrors;
             _settings = next;
             ApplyDisplaySettings();
+            try { ApplyBrowserAudio(); }
+            catch (Exception ex)
+            {
+                AppLog.Write("Apply saved audio: " + ex.GetType().Name);
+                _rebuildRequired = true;
+                ScheduleRetry("网页声音设置应用失败，将重新创建浏览器");
+            }
             if (changedCertificatePolicy)
             {
                 await RecreateBrowserForCertificatePolicyAsync();
@@ -420,7 +434,7 @@ public sealed partial class MainWindow : Window
                 ScheduleRetry("网页缩放应用失败，将重新创建浏览器");
             }
             if (!await ApplyBrowserScrollbarsAsync())
-                await ShowNoticeAsync("滚动条设置暂未生效", "设置已保存，但网页引擎暂时无法应用滚动条选项。请更新 WebView2 Runtime 后重试。网页仍可正常显示。");
+                await ShowNoticeAsync(L.Text("滚动条设置暂未生效"), L.Text("设置已保存，但网页引擎暂时无法应用滚动条选项。请更新 WebView2 Runtime 后重试。网页仍可正常显示。"));
             if (!_loading && !_retryAt.HasValue) SetReadyStatus();
             // The native scrollbar policy fully takes effect on the next
             // document layout. Reload only when this option or the URL changes.
@@ -429,7 +443,7 @@ public sealed partial class MainWindow : Window
         }
         catch (Exception ex)
         {
-            await ShowNoticeAsync("保存失败", "设置未能保存：" + ex.Message);
+            await ShowNoticeAsync(L.Text("保存失败"), L.Format("设置未能保存：{0}", ex.Message));
             return false;
         }
         finally
@@ -442,22 +456,23 @@ public sealed partial class MainWindow : Window
     private async Task ShowNoticeAsync(string title, string message)
     {
         if (_closing) return;
-        var dialog = new ContentDialog { XamlRoot = RootGrid.XamlRoot, Title = title, Content = message, CloseButtonText = "确定", RequestedTheme = RootGrid.ActualTheme };
+        var dialog = new ContentDialog { XamlRoot = RootGrid.XamlRoot, Title = title, Content = message, CloseButtonText = L.Text("确定"), RequestedTheme = RootGrid.ActualTheme };
         await dialog.ShowAsync();
     }
 
     private void ApplyDisplaySettings()
     {
+        ApplyInterfaceLanguage();
         AddressText.Text = _settings.Url;
         _theme.SetPreference(_settings.ThemePreference);
         SetFullscreen(_settings.FullScreen);
         SetTopmost(_settings.AlwaysOnTop);
         _refreshAt = DateTimeOffset.Now.AddMinutes(_settings.RefreshIntervalMinutes);
         UpdatePower();
-        if (!_retryAt.HasValue) SetReadyStatus();
+        if (!_retryAt.HasValue && !_loading && !_initializing && !_certificatePolicyChanging) SetReadyStatus();
     }
 
-    private void SetReadyStatus() => StatusText.Text = (_settings.AutoRefreshEnabled ? $"每 {_settings.RefreshIntervalMinutes} 分钟刷新" : "自动刷新已关闭") + (_power.IsActive ? "  ·  防休眠已开启" : "  ·  防休眠已关闭") + (_settings.IgnoreCertificateErrors ? "  ·  已忽略证书错误" : "") + (_scrollbarWarning == null ? "" : "  ·  " + _scrollbarWarning);
+    private void SetReadyStatus() => StatusText.Text = (_settings.AutoRefreshEnabled ? L.Format("每 {0} 分钟刷新", _settings.RefreshIntervalMinutes) : L.Text("自动刷新已关闭")) + "  ·  " + L.Text(_power.IsActive ? "防休眠已开启" : "防休眠已关闭") + (_settings.IgnoreCertificateErrors ? "  ·  " + L.Text("已忽略证书错误") : "") + (_settings.MutePage ? "  ·  " + L.Text("网页已静音") : "") + (_scrollbarWarning == null ? "" : "  ·  " + L.Text(_scrollbarWarning));
 
     private void UpdatePower()
     {
@@ -467,7 +482,7 @@ public sealed partial class MainWindow : Window
             _power.SetEnabled(_settings.PreventSleep && AppWindow.IsVisible && !WindowInteropService.IsMinimized(this));
             if (!_loading && !_retryAt.HasValue) SetReadyStatus();
         }
-        catch (Exception ex) { AppLog.Write("Power state: " + ex.GetType().Name); StatusText.Text = "无法启用防休眠，请检查系统策略"; }
+        catch (Exception ex) { AppLog.Write("Power state: " + ex.GetType().Name); StatusText.Text = L.Text("无法启用防休眠，请检查系统策略"); }
     }
 
     private void SetFullscreen(bool enabled)

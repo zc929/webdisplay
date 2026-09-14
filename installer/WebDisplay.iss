@@ -1,6 +1,7 @@
 ; WebDisplay WinUI 3 installer. Compile with Inno Setup 6.7 or newer.
 ; Optional ISCC overrides: /DPublishDir="C:\path\to\publish" and
-; /DChineseLanguageFile="C:\path\to\ChineseSimplified.isl".
+; /DChineseLanguageFile="C:\path\to\ChineseSimplified.isl" and
+; /DTraditionalChineseLanguageFile="C:\path\to\ChineseTraditional.isl".
 ; Configuration and browser data live outside {app}, in
 ; %LOCALAPPDATA%\WebDisplay, and are deliberately retained on upgrade/uninstall.
 
@@ -10,8 +11,11 @@
 #ifndef ChineseLanguageFile
   #define ChineseLanguageFile "languages\ChineseSimplified.isl"
 #endif
+#ifndef TraditionalChineseLanguageFile
+  #define TraditionalChineseLanguageFile "languages\ChineseTraditional.isl"
+#endif
 #ifndef AppVersion
-  #define AppVersion "2.4.0"
+  #define AppVersion "2.5.0"
 #endif
 #define AppExeName "WebDisplay.exe"
 
@@ -52,34 +56,48 @@ SetupLogging=yes
 
 [Languages]
 Name: "zhcn"; MessagesFile: "{#ChineseLanguageFile}"
+Name: "zhtw"; MessagesFile: "{#TraditionalChineseLanguageFile}"
 Name: "en"; MessagesFile: "compiler:Default.isl"
 
 [CustomMessages]
 zhcn.AppDisplayName=WebDisplay 网页展示器
+zhtw.AppDisplayName=WebDisplay 網頁展示器
 en.AppDisplayName=WebDisplay
 zhcn.DesktopShortcut=创建桌面快捷方式(&D)
+zhtw.DesktopShortcut=建立桌面捷徑(&D)
 en.DesktopShortcut=Create a desktop shortcut
 zhcn.AdditionalShortcuts=快捷方式：
+zhtw.AdditionalShortcuts=捷徑：
 en.AdditionalShortcuts=Shortcuts:
 zhcn.UninstallShortcut=卸载 WebDisplay 网页展示器
+zhtw.UninstallShortcut=解除安裝 WebDisplay 網頁展示器
 en.UninstallShortcut=Uninstall WebDisplay
 zhcn.LaunchApp=启动 WebDisplay 网页展示器
+zhtw.LaunchApp=啟動 WebDisplay 網頁展示器
 en.LaunchApp=Launch WebDisplay
 zhcn.DependencyTitle=准备网页运行组件
+zhtw.DependencyTitle=準備網頁執行元件
 en.DependencyTitle=Preparing the browser runtime
 zhcn.DependencyDescription=首次安装缺少的 WebView2 Runtime 时需要联网。
+zhtw.DependencyDescription=首次安裝缺少的 WebView2 Runtime 時需要連線至網路。
 en.DependencyDescription=An internet connection is required if WebView2 Runtime is missing.
 zhcn.DependencyInstalling=正在安装 Microsoft Edge WebView2 Runtime，请稍候…
+zhtw.DependencyInstalling=正在安裝 Microsoft Edge WebView2 Runtime，請稍候…
 en.DependencyInstalling=Installing Microsoft Edge WebView2 Runtime. Please wait...
 zhcn.DependencyVerifying=正在确认 WebView2 Runtime 已安装…
+zhtw.DependencyVerifying=正在確認 WebView2 Runtime 已安裝…
 en.DependencyVerifying=Verifying the WebView2 Runtime installation...
 zhcn.DependencyFailure=无法完成 WebView2 Runtime 安装。请确认网络可访问微软下载服务，或先从微软网站手动安装 Evergreen WebView2 Runtime，然后重试。安装程序未继续安装 WebDisplay。
+zhtw.DependencyFailure=無法完成 WebView2 Runtime 安裝。請確認網路可存取 Microsoft 下載服務，或先從 Microsoft 網站手動安裝 Evergreen WebView2 Runtime，然後重試。安裝程式尚未繼續安裝 WebDisplay。
 en.DependencyFailure=WebView2 Runtime could not be installed. Check access to Microsoft download services, or install the Evergreen WebView2 Runtime from Microsoft manually, then retry. WebDisplay installation has not continued.
 zhcn.DependencyExitCode=组件安装程序返回代码：
+zhtw.DependencyExitCode=元件安裝程式傳回代碼：
 en.DependencyExitCode=Runtime installer exit code:
 zhcn.DependencyLaunchFailure=无法启动组件安装程序。系统错误：
+zhtw.DependencyLaunchFailure=無法啟動元件安裝程式。系統錯誤：
 en.DependencyLaunchFailure=The runtime installer could not be started. System error:
 zhcn.UninstallNotice=卸载会保留网页展示设置、日志和网页登录数据。Windows 定时重启计划和自动登录设置不会被更改。如果不再需要这些系统功能，请先取消卸载，返回程序设置将它们关闭。
+zhtw.UninstallNotice=解除安裝會保留網頁展示設定、記錄和網頁登入資料。Windows 定時重新啟動排程和自動登入設定不會變更。如果不再需要這些系統功能，請先取消解除安裝，返回程式設定將它們關閉。
 en.UninstallNotice=Your display settings, logs, and website sign-in data will be preserved. Windows restart schedules and automatic sign-in settings will not be changed. If you no longer need those features, cancel uninstallation and turn them off in WebDisplay settings first.
 
 [Tasks]

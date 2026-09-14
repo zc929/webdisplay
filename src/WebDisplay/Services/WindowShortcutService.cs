@@ -40,11 +40,11 @@ public sealed class WindowShortcutService : IDisposable
         _callback = OnGetMessage;
         uint threadId = ShortcutNative.GetWindowThreadProcessId(_windowHandle, out uint processId);
         if (threadId == 0 || processId != (uint)Environment.ProcessId)
-            throw new InvalidOperationException("无法为当前应用窗口初始化快捷键。");
+            throw new InvalidOperationException(L.Text("无法为当前应用窗口初始化快捷键。"));
         // WH_GETMESSAGE with a nonzero thread ID observes only that thread.
         _hook = ShortcutNative.SetWindowsHookEx(3, _callback, IntPtr.Zero, threadId);
         if (_hook == IntPtr.Zero)
-            throw new Win32Exception(Marshal.GetLastWin32Error(), "无法初始化窗口快捷键。");
+            throw new Win32Exception(Marshal.GetLastWin32Error(), L.Text("无法初始化窗口快捷键。"));
     }
 
     private IntPtr OnGetMessage(int code, UIntPtr removeFlag, IntPtr messagePointer)

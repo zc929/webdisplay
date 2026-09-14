@@ -32,58 +32,69 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <StackPanel Margin="32,24,32,8" Spacing="6">
-            <TextBlock Text="网页展示设置" Style="{ThemeResource TitleTextBlockStyle}"/>
-            <TextBlock Text="配置展示网页、窗口外观和 Windows 自动化。" Style="{StaticResource HintTextStyle}"/>
+            <TextBlock x:Name="LocalizedElement001" Text="网页展示设置" Style="{ThemeResource TitleTextBlockStyle}" TextWrapping="Wrap"/>
+            <TextBlock x:Name="LocalizedElement002" Text="配置展示网页、窗口外观和 Windows 自动化。" Style="{StaticResource HintTextStyle}" TextWrapping="Wrap"/>
         </StackPanel>
         <Pivot x:Name="SettingsPivot" Grid.Row="1" Margin="20,0,20,0">
-            <PivotItem Header="网页与展示">
+            <PivotItem x:Name="LocalizedElement003" Header="网页与展示">
                 <ScrollViewer x:Name="DisplayScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="8,16,8,12">
                     <StackPanel>
                         <Border Style="{StaticResource SettingsCardStyle}">
-                            <Grid ColumnSpacing="24">
+                            <Grid ColumnSpacing="24"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                 <StackPanel Spacing="5" VerticalAlignment="Center">
-                                    <TextBlock Text="外观主题" FontSize="18" FontWeight="SemiBold"/>
-                                    <TextBlock Text="即时预览；保存后记住你的选择。" Style="{StaticResource HintTextStyle}"/>
+                                    <TextBlock x:Name="LocalizedElement004" Text="外观主题" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="LocalizedElement005" Text="即时预览；保存后记住你的选择。" Style="{StaticResource HintTextStyle}" TextWrapping="Wrap"/>
                                 </StackPanel>
                                 <ComboBox x:Name="ThemePreferenceBox" Grid.Column="1" Width="168" VerticalAlignment="Center" AutomationProperties.Name="外观主题" SelectionChanged="ThemePreference_Changed">
-                                    <ComboBoxItem Content="跟随系统" Tag="System"/>
-                                    <ComboBoxItem Content="浅色" Tag="Light"/>
-                                    <ComboBoxItem Content="深色" Tag="Dark"/>
+                                    <ComboBoxItem x:Name="LocalizedElement006" Content="跟随系统" Tag="System"/>
+                                    <ComboBoxItem x:Name="LocalizedElement007" Content="浅色" Tag="Light"/>
+                                    <ComboBoxItem x:Name="LocalizedElement008" Content="深色" Tag="Dark"/>
+                                </ComboBox>
+                                <StackPanel Grid.Row="1" Spacing="5" VerticalAlignment="Center" Margin="0,20,0,0">
+                                    <TextBlock x:Name="LocalizedElement009" Text="界面语言" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap"/>
+                                    <TextBlock x:Name="LocalizedElement010" Text="保存后生效。" Style="{StaticResource HintTextStyle}" TextWrapping="Wrap"/>
+                                </StackPanel>
+                                <ComboBox x:Name="LanguageBox" Grid.Row="1" Grid.Column="1" Width="168" VerticalAlignment="Center" Margin="0,20,0,0" AutomationProperties.Name="界面语言">
+                                    <ComboBoxItem Content="简体中文" Tag="zh-CN"/>
+                                    <ComboBoxItem Content="繁體中文" Tag="zh-TW"/>
+                                    <ComboBoxItem Content="English" Tag="en-US"/>
                                 </ComboBox>
                             </Grid>
                         </Border>
                         <Border Style="{StaticResource SettingsCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="展示网页" Style="{StaticResource SectionTitleStyle}"/>
+                                <TextBlock x:Name="LocalizedElement011" Text="展示网页" Style="{StaticResource SectionTitleStyle}" TextWrapping="Wrap"/>
                                 <TextBox x:Name="UrlBox" Header="网页地址" PlaceholderText="https://example.com" AutomationProperties.Name="网页地址"/>
-                                <TextBlock Text="请输入完整的 https:// 或 http:// 地址。需要登录的网站会保留本机浏览器会话。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18"/>
+                                <TextBlock x:Name="LocalizedElement012" Text="请输入完整的 https:// 或 http:// 地址。需要登录的网站会保留本机浏览器会话。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18" TextWrapping="Wrap"/>
                                 <StackPanel Orientation="Horizontal" Spacing="12">
                                     <TextBox x:Name="ZoomPercentBox" Header="网页缩放（%）" Width="168" Text="100" AutomationProperties.Name="网页缩放百分比"/>
                                     <Button x:Name="ResetZoomButton" Content="恢复100%" VerticalAlignment="Bottom" Click="ResetZoom_Click"/>
                                 </StackPanel>
-                                <TextBlock Text="可输入 25–500 的整数。100% 为原始大小，保存设置后生效。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18"/>
+                                <TextBlock x:Name="LocalizedElement013" Text="可输入 25–500 的整数。100% 为原始大小，保存设置后生效。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18" TextWrapping="Wrap"/>
                                 <ToggleSwitch x:Name="ShowScrollbarsToggle" Header="显示网页滚动条" OnContent="显示" OffContent="隐藏" IsOn="True"/>
-                                <TextBlock Text="关闭后仍可用滚轮、触控或键盘滚动。更改此选项并保存后会刷新网页。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18"/>
+                                <TextBlock x:Name="LocalizedElement014" Text="关闭后仍可用滚轮、触控或键盘滚动。更改此选项并保存后会刷新网页。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18" TextWrapping="Wrap"/>
+                                <ToggleSwitch x:Name="MutePageToggle" Header="网页静音" OnContent="已开启" OffContent="已关闭" IsOn="False"/>
+                                <TextBlock x:Name="LocalizedElement015" Text="开启后仅静音本程序中的网页，不影响其他应用的声音。保存设置后生效。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18" TextWrapping="Wrap"/>
                                 <Grid ColumnSpacing="16">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
                                     <ToggleSwitch x:Name="RefreshToggle" Header="定时刷新网页" OnContent="已开启" OffContent="已关闭" Toggled="RefreshToggle_Toggled"/>
                                     <TextBox x:Name="RefreshMinutesBox" Grid.Column="1" Header="刷新间隔（分钟）" Width="168" Text="5" MaxLength="5" AutomationProperties.Name="刷新间隔（分钟）"/>
                                 </Grid>
-                                <TextBlock Text="间隔可设为 1–10080 分钟。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,0"/>
+                                <TextBlock x:Name="LocalizedElement016" Text="间隔可设为 1–10080 分钟。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
                         <Border x:Name="CertificateSettingsCard" Style="{StaticResource SettingsCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="HTTPS 证书" Style="{StaticResource SectionTitleStyle}"/>
+                                <TextBlock x:Name="LocalizedElement017" Text="HTTPS 证书" Style="{StaticResource SectionTitleStyle}" TextWrapping="Wrap"/>
                                 <ToggleSwitch x:Name="IgnoreCertificateErrorsToggle" Header="忽略 SSL/TLS 证书错误" OnContent="已开启" OffContent="已关闭" IsOn="False"/>
-                                <TextBlock Text="仅在确认可信的内部展示网站需要时开启。更改并保存后会重新加载网页。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,16"/>
-                                <InfoBar IsOpen="True" IsClosable="False" Severity="Warning" Title="开启前请确认网站可信" Message="开启后无法可靠验证网站身份，可能遭到网站冒充或中间人攻击。此设置对网页及其加载的资源均适用。"/>
+                                <TextBlock x:Name="LocalizedElement018" Text="仅在确认可信的内部展示网站需要时开启。更改并保存后会重新加载网页。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,16" TextWrapping="Wrap"/>
+                                <InfoBar x:Name="LocalizedElement019" IsOpen="True" IsClosable="False" Severity="Warning" Title="开启前请确认网站可信" Message="开启后无法可靠验证网站身份，可能遭到网站冒充或中间人攻击。此设置对网页及其加载的资源均适用。"/>
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource SettingsCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="窗口与电源" Style="{StaticResource SectionTitleStyle}"/>
+                                <TextBlock x:Name="LocalizedElement020" Text="窗口与电源" Style="{StaticResource SectionTitleStyle}" TextWrapping="Wrap"/>
                                 <Grid ColumnSpacing="20">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
                                     <ToggleSwitch x:Name="TopmostToggle" Header="窗口始终置顶" OnContent="已开启" OffContent="已关闭"/>
@@ -91,27 +102,27 @@
                                 </Grid>
                                 <Border Height="1" Background="{ThemeResource CardStrokeColorDefaultBrush}" Margin="0,20,0,16"/>
                                 <ToggleSwitch x:Name="PreventSleepToggle" Header="展示期间防止系统休眠与显示器自动关闭" OnContent="已开启" OffContent="已关闭"/>
-                                <TextBlock Text="关闭后遵循 Windows 电源设置；手动锁屏、手动休眠和管理员策略仍然有效。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18"/>
+                                <TextBlock x:Name="LocalizedElement021" Text="关闭后遵循 Windows 电源设置；手动锁屏、手动休眠和管理员策略仍然有效。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,18" TextWrapping="Wrap"/>
                                 <ToggleSwitch x:Name="StartAtLogonToggle" Header="登录 Windows 后自动启动展示程序" OnContent="已开启" OffContent="已关闭"/>
-                                <TextBlock Text="仅适用于当前 Windows 用户。如果自动登录使用其他账号，请登录该账号后开启此选项。开机直接展示还需配置 Windows 自动登录。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,0"/>
+                                <TextBlock x:Name="LocalizedElement022" Text="仅适用于当前 Windows 用户。如果自动登录使用其他账号，请登录该账号后开启此选项。开机直接展示还需配置 Windows 自动登录。" Style="{StaticResource HintTextStyle}" Margin="0,8,0,0" TextWrapping="Wrap"/>
                             </StackPanel>
                         </Border>
-                        <InfoBar IsOpen="True" IsClosable="False" Severity="Informational" Title="无人值守恢复已启用" Message="断网或网页加载失败后会自动重试；网页进程异常退出时会自动重建浏览器。"/>
+                        <InfoBar x:Name="LocalizedElement023" IsOpen="True" IsClosable="False" Severity="Informational" Title="无人值守恢复已启用" Message="断网或网页加载失败后会自动重试；网页进程异常退出时会自动重建浏览器。"/>
                     </StackPanel>
                 </ScrollViewer>
             </PivotItem>
-            <PivotItem Header="系统与账号">
+            <PivotItem x:Name="LocalizedElement024" Header="系统与账号">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="8,16,8,12">
                     <StackPanel>
-                        <InfoBar IsOpen="True" IsClosable="False" Severity="Informational" Title="系统设置独立应用" Message="本页设置通过各自的按钮立即生效，并会请求 Windows 管理员授权。" Margin="0,0,0,16"/>
+                        <InfoBar x:Name="LocalizedElement025" IsOpen="True" IsClosable="False" Severity="Informational" Title="系统设置独立应用" Message="本页设置通过各自的按钮立即生效，并会请求 Windows 管理员授权。" Margin="0,0,0,16"/>
                         <Border Style="{StaticResource SettingsCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="定时重启电脑" Style="{StaticResource SectionTitleStyle}"/>
+                                <TextBlock x:Name="LocalizedElement026" Text="定时重启电脑" Style="{StaticResource SectionTitleStyle}" TextWrapping="Wrap"/>
                                 <ToggleSwitch x:Name="RestartToggle" Header="启用定时重启" OnContent="已开启" OffContent="已关闭" Toggled="RestartToggle_Toggled" Margin="0,0,0,16"/>
                                 <StackPanel x:Name="RestartOptions">
                                     <StackPanel Orientation="Horizontal" Spacing="16" Margin="0,0,0,16">
                                         <TextBox x:Name="RestartTimeBox" Header="重启时间" Width="128" Text="03:00" MaxLength="5" AutomationProperties.Name="重启时间（24小时制）"/>
-                                        <TextBlock Text="24 小时制 · 本机时间" Style="{StaticResource HintTextStyle}" VerticalAlignment="Bottom" Margin="0,0,0,7"/>
+                                        <TextBlock x:Name="LocalizedElement027" Text="24 小时制 · 本机时间" Style="{StaticResource HintTextStyle}" VerticalAlignment="Bottom" Margin="0,0,0,7" TextWrapping="Wrap"/>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Spacing="24" Margin="0,0,0,12">
                                         <RadioButton x:Name="DailyRadio" GroupName="RestartFrequency" Content="每天" Checked="Frequency_Changed"/>
@@ -129,16 +140,16 @@
                                         <CheckBox x:Name="SundayCheck" Grid.Row="1" Grid.Column="2" Content="周日" Tag="SUN"/>
                                     </Grid>
                                 </StackPanel>
-                                <TextBlock Text="计划由 Windows 执行，即使本程序退出也有效。其他程序未保存的内容可能延迟或阻止重启。" Style="{StaticResource HintTextStyle}" Margin="0,0,0,16"/>
+                                <TextBlock x:Name="LocalizedElement028" Text="计划由 Windows 执行，即使本程序退出也有效。其他程序未保存的内容可能延迟或阻止重启。" Style="{StaticResource HintTextStyle}" Margin="0,0,0,16" TextWrapping="Wrap"/>
                                 <Button x:Name="ApplyRestartButton" Click="ApplyRestart_Click">
-                                    <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock Text="应用重启计划（管理员）"/></StackPanel>
+                                    <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock x:Name="LocalizedElement029" Text="应用重启计划（管理员）" TextWrapping="Wrap"/></StackPanel>
                                 </Button>
                                 <TextBlock x:Name="RestartStatusText" TextWrapping="Wrap" Style="{StaticResource HintTextStyle}" Margin="0,12,0,0" AutomationProperties.LiveSetting="Polite"/>
                             </StackPanel>
                         </Border>
                         <Border Style="{StaticResource SettingsCardStyle}">
                             <StackPanel>
-                                <TextBlock Text="Windows 自动登录" Style="{StaticResource SectionTitleStyle}"/>
+                                <TextBlock x:Name="LocalizedElement030" Text="Windows 自动登录" Style="{StaticResource SectionTitleStyle}" TextWrapping="Wrap"/>
                                 <TextBlock x:Name="AutoLogonStatusText" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,16" AutomationProperties.LiveSetting="Polite"/>
                                 <Grid ColumnSpacing="16" RowSpacing="16" Margin="0,0,0,12">
                                     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -147,13 +158,13 @@
                                     <TextBox x:Name="DomainBox" Grid.Column="1" Header="域 / 本机名称" AutomationProperties.Name="域或本机名称"/>
                                     <PasswordBox x:Name="AccountPasswordBox" Grid.Row="1" Grid.ColumnSpan="2" Header="账号密码" PasswordRevealMode="Hidden" AutomationProperties.Name="Windows 账号密码"/>
                                 </Grid>
-                                <TextBlock Text="本地账号使用本机名称作为域。请填写账号密码，而非 Windows Hello PIN；域账号受组织策略约束。密码只用于本次系统配置，不写入程序设置文件。" Style="{StaticResource HintTextStyle}" Margin="0,0,0,16"/>
+                                <TextBlock x:Name="LocalizedElement031" Text="本地账号使用本机名称作为域。请填写账号密码，而非 Windows Hello PIN；域账号受组织策略约束。密码只用于本次系统配置，不写入程序设置文件。" Style="{StaticResource HintTextStyle}" Margin="0,0,0,16" TextWrapping="Wrap"/>
                                 <StackPanel Spacing="12">
                                     <Button x:Name="EnableAutoLogonButton" Click="EnableAutoLogon_Click">
-                                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock Text="启用自动登录（管理员）"/></StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock x:Name="LocalizedElement032" Text="启用自动登录（管理员）" TextWrapping="Wrap"/></StackPanel>
                                     </Button>
                                     <Button x:Name="DisableAutoLogonButton" Click="DisableAutoLogon_Click">
-                                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock Text="关闭自动登录（管理员）"/></StackPanel>
+                                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE72E;" FontSize="16"/><TextBlock x:Name="LocalizedElement033" Text="关闭自动登录（管理员）" TextWrapping="Wrap"/></StackPanel>
                                     </Button>
                                 </StackPanel>
                                 <TextBlock x:Name="AutoLogonActionText" Style="{StaticResource HintTextStyle}" Margin="0,12,0,0" AutomationProperties.LiveSetting="Polite"/>
@@ -166,7 +177,7 @@
         <Border Grid.Row="2" Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}" BorderThickness="0,1,0,0" Padding="28,16">
             <Grid ColumnSpacing="12">
                 <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
-                <TextBlock x:Name="ValidationText" Text="保存将应用展示设置和登录后启动选项。" Style="{StaticResource HintTextStyle}" VerticalAlignment="Center" Margin="0,0,12,0" AutomationProperties.LiveSetting="Assertive"/>
+                <TextBlock x:Name="ValidationText" Text="保存将应用展示设置和登录后启动选项。" Style="{StaticResource HintTextStyle}" VerticalAlignment="Center" Margin="0,0,12,0" AutomationProperties.LiveSetting="Assertive" TextWrapping="Wrap"/>
                 <Button x:Name="CancelButton" Grid.Column="1" Content="取消" Click="Cancel_Click" MinWidth="88"/>
                 <Button x:Name="SaveButton" Grid.Column="2" Content="保存设置" Click="Save_Click" MinWidth="120" Style="{StaticResource AccentButtonStyle}"/>
             </Grid>

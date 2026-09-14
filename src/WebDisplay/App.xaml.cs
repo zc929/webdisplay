@@ -26,7 +26,7 @@ public partial class App : Application
         catch (Exception ex)
         {
             AppLog.Write("Window creation failed: " + ex);
-            WindowInteropService.ShowMessage(null, "网页展示器", "程序启动失败：" + ex.Message);
+            WindowInteropService.ShowMessage(null, L.Text("网页展示器"), L.Format("程序启动失败：{0}", ex.Message));
             Environment.ExitCode = 1;
             Exit();
         }

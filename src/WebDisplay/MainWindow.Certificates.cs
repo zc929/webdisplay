@@ -24,7 +24,7 @@ public sealed partial class MainWindow
         try
         {
             if (_closing) return;
-            StatusText.Text = "正在重新应用 HTTPS 证书设置…";
+            StatusText.Text = L.Text("正在重新应用 HTTPS 证书设置…");
             var browser = _browser;
             var environment = _browserEnvironment;
             hadBrowser = browser != null;

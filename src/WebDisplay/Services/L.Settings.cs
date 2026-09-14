@@ -1,0 +1,106 @@
+using System.Collections.Generic;
+
+namespace WebDisplay.Services;
+
+public static partial class L
+{
+    static partial void AddSettingsTranslations(Dictionary<string, Translation> entries)
+    {
+        entries["网页展示 · 设置"] = new("網頁展示 · 設定", "Web Display · Settings");
+        entries["网页展示设置"] = new("網頁展示設定", "Web Display settings");
+        entries["配置展示网页、窗口外观和 Windows 自动化。"] = new("設定展示網頁、視窗外觀與 Windows 自動化。", "Configure the page, appearance, and Windows automation.");
+        entries["网页与展示"] = new("網頁與展示", "Page & display");
+        entries["系统与账号"] = new("系統與帳戶", "System & account");
+        entries["外观主题"] = new("外觀主題", "Appearance");
+        entries["即时预览；保存后记住你的选择。"] = new("即時預覽；儲存後記住你的選擇。", "Preview now; save to keep your choice.");
+        entries["跟随系统"] = new("跟隨系統", "System default");
+        entries["浅色"] = new("淺色", "Light");
+        entries["深色"] = new("深色", "Dark");
+        entries["界面语言"] = new("介面語言", "Interface language");
+        entries["保存后生效。"] = new("儲存後生效。", "Applied when you save.");
+        entries["展示网页"] = new("展示網頁", "Display page");
+        entries["网页地址"] = new("網頁位址", "Web address");
+        entries["请输入完整的 https:// 或 http:// 地址。需要登录的网站会保留本机浏览器会话。"] = new("請輸入完整的 https:// 或 http:// 位址。需要登入的網站會保留本機瀏覽器工作階段。", "Enter a full https:// or http:// address. Website sign-in data is stored in this computer's browser profile.");
+        entries["网页缩放（%）"] = new("網頁縮放（%）", "Page zoom (%)");
+        entries["网页缩放百分比"] = new("網頁縮放百分比", "Page zoom percentage");
+        entries["恢复100%"] = new("還原100%", "Reset to 100%");
+        entries["可输入 25–500 的整数。100% 为原始大小，保存设置后生效。"] = new("可輸入 25–500 的整數。100% 為原始大小，儲存設定後生效。", "Enter a whole number from 25 to 500. 100% is the original size. Applied when you save.");
+        entries["显示网页滚动条"] = new("顯示網頁捲軸", "Show page scrollbars");
+        entries["显示"] = new("顯示", "Shown");
+        entries["隐藏"] = new("隱藏", "Hidden");
+        entries["关闭后仍可用滚轮、触控或键盘滚动。更改此选项并保存后会刷新网页。"] = new("關閉後仍可用滾輪、觸控或鍵盤捲動。變更此選項並儲存後會重新整理網頁。", "You can still scroll with a mouse wheel, touch, or keyboard when hidden. Saving a change reloads the page.");
+        entries["网页静音"] = new("網頁靜音", "Mute page audio");
+        entries["开启后仅静音本程序中的网页，不影响其他应用的声音。保存设置后生效。"] = new("開啟後僅將本程式中的網頁靜音，不影響其他應用程式的聲音。儲存設定後生效。", "Mutes only the page in this app. Audio from other apps is unaffected. Applied when you save.");
+        entries["定时刷新网页"] = new("定時重新整理網頁", "Refresh automatically");
+        entries["已开启"] = new("已開啟", "On");
+        entries["已关闭"] = new("已關閉", "Off");
+        entries["刷新间隔（分钟）"] = new("重新整理間隔（分鐘）", "Interval (minutes)");
+        entries["间隔可设为 1–10080 分钟。"] = new("間隔可設為 1–10080 分鐘。", "Set an interval from 1 to 10080 minutes.");
+        entries["HTTPS 证书"] = new("HTTPS 憑證", "HTTPS certificates");
+        entries["忽略 SSL/TLS 证书错误"] = new("忽略 SSL/TLS 憑證錯誤", "Ignore SSL/TLS certificate errors");
+        entries["仅在确认可信的内部展示网站需要时开启。更改并保存后会重新加载网页。"] = new("僅在確認可信的內部展示網站需要時開啟。變更並儲存後會重新載入網頁。", "Enable only when needed for a trusted internal display site. Saving a change reloads the page.");
+        entries["开启前请确认网站可信"] = new("開啟前請確認網站可信", "Confirm the site is trusted");
+        entries["开启后无法可靠验证网站身份，可能遭到网站冒充或中间人攻击。此设置对网页及其加载的资源均适用。"] = new("開啟後無法可靠驗證網站身分，可能遭到網站冒充或中間人攻擊。此設定適用於網頁及其載入的資源。", "When enabled, site identity cannot be reliably verified, exposing you to impersonation or man-in-the-middle attacks. Applies to the page and its resources.");
+        entries["窗口与电源"] = new("視窗與電源", "Window & power");
+        entries["窗口始终置顶"] = new("視窗保持最上層", "Always on top");
+        entries["全屏展示"] = new("全螢幕展示", "Full screen");
+        entries["展示期间防止系统休眠与显示器自动关闭"] = new("展示期間防止系統睡眠與螢幕自動關閉", "Keep screen and system awake while displaying");
+        entries["关闭后遵循 Windows 电源设置；手动锁屏、手动休眠和管理员策略仍然有效。"] = new("關閉後遵循 Windows 電源設定；手動鎖定、手動睡眠與系統管理員原則仍然有效。", "When off, Windows power settings apply. Manual locking, sleep, and administrator policies still work.");
+        entries["登录 Windows 后自动启动展示程序"] = new("登入 Windows 後自動啟動展示程式", "Start after Windows sign-in");
+        entries["仅适用于当前 Windows 用户。如果自动登录使用其他账号，请登录该账号后开启此选项。开机直接展示还需配置 Windows 自动登录。"] = new("僅適用於目前的 Windows 使用者。若自動登入使用其他帳戶，請登入該帳戶後開啟此選項。開機直接展示還需設定 Windows 自動登入。", "Applies to the current Windows user. If automatic sign-in uses another account, enable this while signed in to that account. Unattended startup also requires Windows automatic sign-in.");
+        entries["无人值守恢复已启用"] = new("無人值守復原已啟用", "Automatic recovery is enabled");
+        entries["断网或网页加载失败后会自动重试；网页进程异常退出时会自动重建浏览器。"] = new("網路中斷或網頁載入失敗後會自動重試；網頁處理程序異常結束時會自動重建瀏覽器。", "Retries after network or page-loading failures and recreates the browser if a page process fails.");
+        entries["系统设置独立应用"] = new("系統設定需個別套用", "Apply system settings separately");
+        entries["本页设置通过各自的按钮立即生效，并会请求 Windows 管理员授权。"] = new("本頁設定透過各自的按鈕立即生效，並會要求 Windows 系統管理員授權。", "The buttons on this page apply changes immediately and request Windows administrator approval.");
+        entries["定时重启电脑"] = new("排程重新啟動電腦", "Scheduled restart");
+        entries["启用定时重启"] = new("啟用排程重新啟動", "Enable scheduled restart");
+        entries["重启时间"] = new("重新啟動時間", "Restart time");
+        entries["重启时间（24小时制）"] = new("重新啟動時間（24 小時制）", "Restart time (24-hour)");
+        entries["24 小时制 · 本机时间"] = new("24 小時制 · 本機時間", "24-hour clock · Local time");
+        entries["每天"] = new("每天", "Daily");
+        entries["每周指定日期"] = new("每週指定日期", "Selected weekdays");
+        entries["周一"] = new("週一", "Mon");
+        entries["周二"] = new("週二", "Tue");
+        entries["周三"] = new("週三", "Wed");
+        entries["周四"] = new("週四", "Thu");
+        entries["周五"] = new("週五", "Fri");
+        entries["周六"] = new("週六", "Sat");
+        entries["周日"] = new("週日", "Sun");
+        entries["计划由 Windows 执行，即使本程序退出也有效。其他程序未保存的内容可能延迟或阻止重启。"] = new("排程由 Windows 執行，即使本程式結束也有效。其他程式未儲存的內容可能延遲或阻止重新啟動。", "Windows runs the schedule even when this app is closed. Unsaved work in other apps may delay or prevent a restart.");
+        entries["应用重启计划（管理员）"] = new("套用重新啟動排程（系統管理員）", "Apply restart schedule (admin)");
+        entries["Windows 自动登录"] = new("Windows 自動登入", "Windows automatic sign-in");
+        entries["Windows 账号"] = new("Windows 帳戶", "Windows account");
+        entries["域 / 本机名称"] = new("網域／本機名稱", "Domain / computer name");
+        entries["域或本机名称"] = new("網域或本機名稱", "Domain or computer name");
+        entries["账号密码"] = new("帳戶密碼", "Account password");
+        entries["Windows 账号密码"] = new("Windows 帳戶密碼", "Windows account password");
+        entries["本地账号使用本机名称作为域。请填写账号密码，而非 Windows Hello PIN；域账号受组织策略约束。密码只用于本次系统配置，不写入程序设置文件。"] = new("本機帳戶使用本機名稱作為網域。請填寫帳戶密碼，而非 Windows Hello PIN；網域帳戶受組織原則約束。密碼僅用於本次系統設定，不寫入程式設定檔。", "For a local account, use this computer's name as the domain. Enter the account password, not a Windows Hello PIN. Organization policies apply to domain accounts. The password is used for this operation only and is not saved in the app's settings file.");
+        entries["启用自动登录（管理员）"] = new("啟用自動登入（系統管理員）", "Enable automatic sign-in (admin)");
+        entries["关闭自动登录（管理员）"] = new("關閉自動登入（系統管理員）", "Disable automatic sign-in (admin)");
+        entries["保存将应用展示设置和登录后启动选项。"] = new("儲存將套用展示設定與登入後啟動選項。", "Save applies display and startup settings.");
+        entries["取消"] = new("取消", "Cancel");
+        entries["保存设置"] = new("儲存設定", "Save settings");
+
+        entries["当前计划：{0} {1} 重启。"] = new("目前排程：{0} {1} 重新啟動。", "Current schedule: restart {0} at {1}.");
+        entries["当前未启用定时重启。"] = new("目前未啟用排程重新啟動。", "Scheduled restart is off.");
+        entries["已启用 · {0}"] = new("已啟用 · {0}", "Enabled · {0}");
+        entries["当前未启用 Windows 自动登录。"] = new("目前未啟用 Windows 自動登入。", "Windows automatic sign-in is off.");
+        entries["暂时无法读取系统设置：{0}"] = new("暫時無法讀取系統設定：{0}", "Unable to read system settings: {0}");
+        entries["自动登录状态读取失败。"] = new("無法讀取自動登入狀態。", "Unable to read automatic sign-in status.");
+        entries["请输入完整的 http:// 或 https:// 网页地址，网址中不要包含账号密码。"] = new("請輸入完整的 http:// 或 https:// 網頁位址，網址中請勿包含帳戶密碼。", "Enter a full http:// or https:// address without an embedded username or password.");
+        entries["网页缩放必须是 25 到 500 之间的整数百分比。"] = new("網頁縮放必須是 25 到 500 之間的整數百分比。", "Page zoom must be a whole number from 25 to 500 percent.");
+        entries["刷新间隔必须是 1 到 10080 之间的整数分钟。"] = new("重新整理間隔必須是 1 到 10080 之間的整數分鐘。", "The refresh interval must be a whole number from 1 to 10080 minutes.");
+        entries["请等待当前系统设置操作结束后再关闭窗口。"] = new("請等候目前的系統設定操作完成後再關閉視窗。", "Wait for the current system operation to finish before closing this window.");
+        entries["请输入有效的 24 小时制时间，例如 03:00 或 18:30。"] = new("請輸入有效的 24 小時制時間，例如 03:00 或 18:30。", "Enter a valid 24-hour time, such as 03:00 or 18:30.");
+        entries["每周计划请至少选择一个日期。"] = new("每週排程請至少選取一天。", "Select at least one weekday for the weekly schedule.");
+        entries["正在请求管理员授权并应用计划…"] = new("正在要求系統管理員授權並套用排程…", "Requesting administrator approval and applying the schedule...");
+        entries["已应用：{0} {1} 重启。"] = new("已套用：{0} {1} 重新啟動。", "Applied: restart {0} at {1}.");
+        entries["已关闭定时重启。"] = new("已關閉排程重新啟動。", "Scheduled restart has been turned off.");
+        entries["操作未完成：{0}"] = new("操作未完成：{0}", "The operation did not complete: {0}");
+        entries["请填写要自动登录的 Windows 账号。"] = new("請填寫要自動登入的 Windows 帳戶。", "Enter the Windows account to sign in automatically.");
+        entries["正在请求管理员授权并配置自动登录…"] = new("正在要求系統管理員授權並設定自動登入…", "Requesting administrator approval and configuring automatic sign-in...");
+        entries["已应用，将在下一次 Windows 登录时生效。"] = new("已套用，將於下一次 Windows 登入時生效。", "Applied. The change takes effect at the next Windows sign-in.");
+        entries["已关闭自动登录。"] = new("已關閉自動登入。", "Automatic sign-in has been turned off.");
+        entries["正在应用 Windows 设置，请完成管理员授权。"] = new("正在套用 Windows 設定，請完成系統管理員授權。", "Applying Windows settings. Complete the administrator approval prompt.");
+    }
+}

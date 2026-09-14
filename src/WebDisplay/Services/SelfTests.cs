@@ -22,6 +22,43 @@ internal static class SelfTests
         static void Assert(bool condition, string message = "Unexpected result") { if (!condition) throw new InvalidOperationException(message); }
         static void Reject(Action action) { try { action(); } catch (ArgumentException) { return; } throw new InvalidOperationException("Invalid input accepted"); }
 
+        Check("Old configurations keep Simplified Chinese and unmuted page audio", () =>
+        {
+            var legacy = JsonSerializer.Deserialize<AppSettings>("{\"Url\":\"https://example.com\",\"ZoomPercent\":137,\"IgnoreCertificateErrors\":true,\"ShowScrollbars\":false}")!;
+            legacy.Validate();
+            Assert(legacy.Language == "zh-CN" && !legacy.MutePage && legacy.ZoomPercent == 137 && legacy.IgnoreCertificateErrors && !legacy.ShowScrollbars);
+            Assert(new AppSettings().Language == "zh-CN" && !new AppSettings().MutePage);
+        });
+        Check("Language choices validate and cloned audio and language settings are independent", () =>
+        {
+            foreach (string language in new[] { "zh-CN", "zh-TW", "en-US" }) new AppSettings { Language = language }.Validate();
+            foreach (string invalid in new[] { "", "auto", "de-DE" }) Reject(() => new AppSettings { Language = invalid }.Validate());
+            var original = new AppSettings();
+            var changed = original.Clone();
+            changed.Language = "en-US"; changed.MutePage = true;
+            Assert(original.Language == "zh-CN" && !original.MutePage && changed.Language == "en-US" && changed.MutePage);
+        });
+        Check("Three-language resources are complete and preserve formatting arguments", () =>
+        {
+            Assert(L.GetTranslationIssues().Count == 0, string.Join("; ", L.GetTranslationIssues()));
+            string prior = L.Language;
+            try
+            {
+                foreach (string language in new[] { "zh-CN", "zh-TW", "en-US" })
+                {
+                    L.SetLanguage(language);
+                    Assert(L.Format("每 {0} 分钟刷新", 17).Contains("17"));
+                    Assert(L.HasTranslation("网页静音") && L.HasTranslation("网页展示器"));
+                }
+                L.SetLanguage("en-US");
+                Assert(L.Text("设置") == "Settings" && L.Text("网页展示器") == "WebDisplay");
+                L.SetLanguage("zh-TW");
+                Assert(L.Text("设置") == "設定" && L.Text("网页展示器") == "網頁展示器");
+                L.SetLanguage("zh-CN");
+                Assert(L.Text("设置") == "设置");
+            }
+            finally { L.SetLanguage(prior); }
+        });
         Check("Default system mutations disabled", () => { var s = new AppSettings(); Assert(!s.StartAtLogon && !s.RestartEnabled); });
         Check("Certificate error bypass is opt-in and legacy configurations remain strict", () =>
         {
@@ -90,10 +127,10 @@ internal static class SelfTests
         Check("Settings persistence and corrupt-file recovery", () =>
         {
             var store = new SettingsStore(Path.Combine(directory, "self-test-data"));
-            var expected = new AppSettings { Url = "https://example.com/test", AutoRefreshEnabled = true, RefreshIntervalMinutes = 17, FullScreen = false, PreventSleep = false, ThemePreference = "Dark", ZoomPercent = 137, ShowScrollbars = false, IgnoreCertificateErrors = true };
+            var expected = new AppSettings { Url = "https://example.com/test", AutoRefreshEnabled = true, RefreshIntervalMinutes = 17, FullScreen = false, PreventSleep = false, ThemePreference = "Dark", ZoomPercent = 137, ShowScrollbars = false, IgnoreCertificateErrors = true, Language = "en-US", MutePage = true };
             store.Save(expected);
             var actual = store.Load();
-            Assert(actual.Url == expected.Url && actual.RefreshIntervalMinutes == 17 && !actual.PreventSleep && actual.ThemePreference == "Dark" && actual.ZoomPercent == 137 && !actual.ShowScrollbars && actual.IgnoreCertificateErrors);
+            Assert(actual.Url == expected.Url && actual.RefreshIntervalMinutes == 17 && !actual.PreventSleep && actual.ThemePreference == "Dark" && actual.ZoomPercent == 137 && !actual.ShowScrollbars && actual.IgnoreCertificateErrors && actual.Language == "en-US" && actual.MutePage);
             Assert(!File.ReadAllText(store.FilePath).Contains("password", StringComparison.OrdinalIgnoreCase));
             File.WriteAllText(store.FilePath, "{broken");
             Assert(store.Load().Url == new AppSettings().Url && store.LoadWarning != null);
