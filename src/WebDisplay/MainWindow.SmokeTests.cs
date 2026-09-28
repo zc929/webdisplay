@@ -142,7 +142,7 @@ public sealed partial class MainWindow
             dialog.ZoomInputText = "200";
             ((ToggleSwitch)root.FindName("ShowScrollbarsToggle")).IsOn = true;
             ((ToggleSwitch)root.FindName("MutePageToggle")).IsOn = false;
-            ((ComboBox)root.FindName("LanguageBox")).SelectedIndex = 1;
+            ((ComboBox)root.FindName("LanguageBox")).SelectedIndex = 4;
             ((ToggleSwitch)root.FindName("IgnoreCertificateErrorsToggle")).IsOn = true;
             await Task.Delay(100);
             dialog.Close();

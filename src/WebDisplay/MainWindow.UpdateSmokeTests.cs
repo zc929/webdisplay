@@ -66,7 +66,7 @@ public sealed partial class MainWindow
             }
             _smokeChecks.Add("New releases blink with the Windows animation preference and prevent overlapping checks");
 
-            foreach (string locale in new[] { "en-US", "zh-TW", "zh-CN" })
+            foreach (string locale in new[] { "en-US", "zh-TW", "ja-JP", "ko-KR", "zh-CN" })
             {
                 _settings.Language = locale;
                 ApplyInterfaceLanguage();
@@ -79,7 +79,7 @@ public sealed partial class MainWindow
                     await SavePreviewAsync(RootGrid, "updates-" + locale + "-" + name + ".png");
                 }
             }
-            _smokeChecks.Add("Update indicator supports all three interface languages in dark and light themes");
+            _smokeChecks.Add("Update indicator supports all five interface languages in dark and light themes");
 
             SetFullscreen(true);
             await Task.Delay(300);

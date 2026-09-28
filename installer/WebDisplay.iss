@@ -1,7 +1,9 @@
 ; WebDisplay WinUI 3 installer. Compile with Inno Setup 6.7 or newer.
 ; Optional ISCC overrides: /DPublishDir="C:\path\to\publish" and
 ; /DChineseLanguageFile="C:\path\to\ChineseSimplified.isl" and
-; /DTraditionalChineseLanguageFile="C:\path\to\ChineseTraditional.isl".
+; /DTraditionalChineseLanguageFile="C:\path\to\ChineseTraditional.isl",
+; /DJapaneseLanguageFile="C:\path\to\Japanese.isl" and
+; /DKoreanLanguageFile="C:\path\to\Korean.isl".
 ; Configuration and browser data live outside {app}, in
 ; %LOCALAPPDATA%\WebDisplay, and are deliberately retained on upgrade/uninstall.
 
@@ -14,8 +16,14 @@
 #ifndef TraditionalChineseLanguageFile
   #define TraditionalChineseLanguageFile "languages\ChineseTraditional.isl"
 #endif
+#ifndef JapaneseLanguageFile
+  #define JapaneseLanguageFile "languages\Japanese.isl"
+#endif
+#ifndef KoreanLanguageFile
+  #define KoreanLanguageFile "languages\Korean.isl"
+#endif
 #ifndef AppVersion
-  #define AppVersion "2.6.0"
+  #define AppVersion "2.6.1"
 #endif
 #define AppExeName "WebDisplay.exe"
 
@@ -58,6 +66,12 @@ SetupLogging=yes
 Name: "zhcn"; MessagesFile: "{#ChineseLanguageFile}"
 Name: "zhtw"; MessagesFile: "{#TraditionalChineseLanguageFile}"
 Name: "en"; MessagesFile: "compiler:Default.isl"
+Name: "ja"; MessagesFile: "{#JapaneseLanguageFile}"
+Name: "ko"; MessagesFile: "{#KoreanLanguageFile}"
+
+[Messages]
+; This optional upstream Japanese entry is empty in compiler:Default.isl.
+ja.HelpTextNote=
 
 [CustomMessages]
 zhcn.AppDisplayName=WebDisplay 网页展示器
@@ -99,6 +113,33 @@ en.DependencyLaunchFailure=The runtime installer could not be started. System er
 zhcn.UninstallNotice=卸载会保留网页展示设置、日志和网页登录数据。Windows 定时重启计划和自动登录设置不会被更改。如果不再需要这些系统功能，请先取消卸载，返回程序设置将它们关闭。
 zhtw.UninstallNotice=解除安裝會保留網頁展示設定、記錄和網頁登入資料。Windows 定時重新啟動排程和自動登入設定不會變更。如果不再需要這些系統功能，請先取消解除安裝，返回程式設定將它們關閉。
 en.UninstallNotice=Your display settings, logs, and website sign-in data will be preserved. Windows restart schedules and automatic sign-in settings will not be changed. If you no longer need those features, cancel uninstallation and turn them off in WebDisplay settings first.
+
+ja.AppDisplayName=WebDisplay ウェブページ表示ツール
+ja.DesktopShortcut=デスクトップにショートカットを作成する(&D)
+ja.AdditionalShortcuts=ショートカット:
+ja.UninstallShortcut=WebDisplay をアンインストール
+ja.LaunchApp=WebDisplay を起動
+ja.DependencyTitle=ブラウザー ランタイムを準備しています
+ja.DependencyDescription=WebView2 Runtime がインストールされていない場合は、インターネット接続が必要です。
+ja.DependencyInstalling=Microsoft Edge WebView2 Runtime をインストールしています。しばらくお待ちください…
+ja.DependencyVerifying=WebView2 Runtime のインストールを確認しています…
+ja.DependencyFailure=WebView2 Runtime をインストールできませんでした。Microsoft のダウンロードサービスに接続できることを確認するか、Microsoft のサイトから Evergreen WebView2 Runtime を手動でインストールしてから、もう一度お試しください。WebDisplay のインストールは続行されていません。
+ja.DependencyExitCode=ランタイム インストーラーの終了コード:
+ja.DependencyLaunchFailure=ランタイム インストーラーを起動できませんでした。システム エラー:
+ja.UninstallNotice=表示設定、ログ、およびウェブサイトのログインデータは保持されます。Windows の再起動スケジュールと自動ログインの設定は変更されません。これらの機能が不要な場合は、アンインストールをキャンセルし、先に WebDisplay の設定で無効にしてください。
+ko.AppDisplayName=WebDisplay 웹페이지 표시 도구
+ko.DesktopShortcut=바탕 화면 바로 가기 만들기(&D)
+ko.AdditionalShortcuts=바로 가기:
+ko.UninstallShortcut=WebDisplay 제거
+ko.LaunchApp=WebDisplay 실행
+ko.DependencyTitle=브라우저 런타임 준비 중
+ko.DependencyDescription=WebView2 Runtime이 설치되어 있지 않으면 인터넷 연결이 필요합니다.
+ko.DependencyInstalling=Microsoft Edge WebView2 Runtime을 설치하는 중입니다. 잠시 기다려 주세요…
+ko.DependencyVerifying=WebView2 Runtime 설치를 확인하는 중입니다…
+ko.DependencyFailure=WebView2 Runtime을 설치하지 못했습니다. Microsoft 다운로드 서비스에 연결할 수 있는지 확인하거나 Microsoft 웹사이트에서 Evergreen WebView2 Runtime을 수동으로 설치한 후 다시 시도하세요. WebDisplay 설치는 진행되지 않았습니다.
+ko.DependencyExitCode=런타임 설치 프로그램 종료 코드:
+ko.DependencyLaunchFailure=런타임 설치 프로그램을 시작하지 못했습니다. 시스템 오류:
+ko.UninstallNotice=표시 설정, 로그 및 웹사이트 로그인 데이터는 유지됩니다. Windows 예약 다시 시작 및 자동 로그인 설정은 변경되지 않습니다. 이러한 기능이 더 이상 필요하지 않으면 제거를 취소하고 먼저 WebDisplay 설정에서 해당 기능을 끄세요.
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:DesktopShortcut}"; GroupDescription: "{cm:AdditionalShortcuts}"; Flags: unchecked

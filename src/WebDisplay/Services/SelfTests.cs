@@ -31,29 +31,41 @@ internal static class SelfTests
         });
         Check("Language choices validate and cloned audio and language settings are independent", () =>
         {
-            foreach (string language in new[] { "zh-CN", "zh-TW", "en-US" }) new AppSettings { Language = language }.Validate();
+            foreach (string language in L.SupportedLanguages) new AppSettings { Language = language }.Validate();
             foreach (string invalid in new[] { "", "auto", "de-DE" }) Reject(() => new AppSettings { Language = invalid }.Validate());
             var original = new AppSettings();
             var changed = original.Clone();
             changed.Language = "en-US"; changed.MutePage = true;
             Assert(original.Language == "zh-CN" && !original.MutePage && changed.Language == "en-US" && changed.MutePage);
         });
-        Check("Three-language resources are complete and preserve formatting arguments", () =>
+        Check("Five-language resources are complete and preserve formatting arguments", () =>
         {
             Assert(L.GetTranslationIssues().Count == 0, string.Join("; ", L.GetTranslationIssues()));
             string prior = L.Language;
             try
             {
-                foreach (string language in new[] { "zh-CN", "zh-TW", "en-US" })
+                foreach (string language in L.SupportedLanguages)
                 {
                     L.SetLanguage(language);
+                    Assert(L.Language == language && L.NormalizeLanguage(language) == language);
                     Assert(L.Format("每 {0} 分钟刷新", 17).Contains("17"));
                     Assert(L.HasTranslation("网页静音") && L.HasTranslation("网页展示器"));
+                    var request = new AdminRequest { Operation = "restart", Enabled = true, Time = "03:00" };
+                    Assert(AdminPipe.LocalizeResponse(request, new AdminResponse { Success = true }) ==
+                        L.Format("定时重启已保存，将按电脑本地时间 {0} 执行。", "03:00"));
+                    Assert(AdminPipe.LocalizeResponse(request, new AdminResponse { Success = false, Message = "系统配置失败：不支持的管理员操作。" }) ==
+                        L.Format("系统配置失败：{0}", L.Text("不支持的管理员操作。")));
                 }
                 L.SetLanguage("en-US");
                 Assert(L.Text("设置") == "Settings" && L.Text("网页展示器") == "WebDisplay");
                 L.SetLanguage("zh-TW");
                 Assert(L.Text("设置") == "設定" && L.Text("网页展示器") == "網頁展示器");
+                L.SetLanguage("ja-JP");
+                Assert(L.Text("设置") == "設定");
+                L.SetLanguage("ko-KR");
+                Assert(L.Text("设置") == "설정");
+                L.SetLanguage("unsupported");
+                Assert(L.Language == "zh-CN");
                 L.SetLanguage("zh-CN");
                 Assert(L.Text("设置") == "设置");
             }

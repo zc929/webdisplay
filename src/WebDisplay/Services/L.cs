@@ -14,24 +14,30 @@ public static partial class L
 
     private static string _language = "zh-CN";
     private static readonly Dictionary<string, Translation> Entries = CreateDictionary();
+    private static readonly Dictionary<string, string> JapaneseEntries = CreateAdditionalDictionary("ja-JP");
+    private static readonly Dictionary<string, string> KoreanEntries = CreateAdditionalDictionary("ko-KR");
+
+    public static IReadOnlyList<string> SupportedLanguages { get; } =
+        Array.AsReadOnly(new[] { "zh-CN", "zh-TW", "en-US", "ja-JP", "ko-KR" });
 
     public static string Language => Volatile.Read(ref _language);
 
     public static void SetLanguage(string language) => Volatile.Write(ref _language, NormalizeLanguage(language));
 
-    public static string NormalizeLanguage(string? language) => language switch
-    {
-        "zh-TW" => "zh-TW",
-        "en-US" => "en-US",
-        _ => "zh-CN"
-    };
+    public static bool IsSupportedLanguage(string? language) =>
+        language is "zh-CN" or "zh-TW" or "en-US" or "ja-JP" or "ko-KR";
+
+    public static string NormalizeLanguage(string? language) => IsSupportedLanguage(language) ? language! : "zh-CN";
 
     public static string Text(string simplifiedChinese)
     {
         if (string.IsNullOrEmpty(simplifiedChinese)) return simplifiedChinese ?? string.Empty;
-        if (Language == "zh-CN" || !Entries.TryGetValue(simplifiedChinese, out Translation entry))
+        string language = Language;
+        if (language == "ja-JP" && JapaneseEntries.TryGetValue(simplifiedChinese, out string? japanese)) return japanese;
+        if (language == "ko-KR" && KoreanEntries.TryGetValue(simplifiedChinese, out string? korean)) return korean;
+        if (language == "zh-CN" || !Entries.TryGetValue(simplifiedChinese, out Translation entry))
             return simplifiedChinese;
-        return Language == "zh-TW" ? entry.TraditionalChinese : entry.English;
+        return language == "zh-TW" ? entry.TraditionalChinese : entry.English;
     }
 
     public static string Format(string simplifiedChineseFormat, params object[] args)
@@ -39,20 +45,29 @@ public static partial class L
 
     public static bool HasTranslation(string simplifiedChinese) => Entries.ContainsKey(simplifiedChinese);
 
-    /// <summary>Checks that both translations exist and preserve numbered format arguments.</summary>
+    /// <summary>Checks every supported translation for missing text and numbered format arguments.</summary>
     public static IReadOnlyList<string> GetTranslationIssues()
     {
         var issues = new List<string>();
         foreach (var pair in Entries)
         {
             string arguments = FormatArguments(pair.Key);
-            if (string.IsNullOrWhiteSpace(pair.Value.TraditionalChinese) ||
-                FormatArguments(pair.Value.TraditionalChinese) != arguments)
-                issues.Add("zh-TW: " + pair.Key);
-            if (string.IsNullOrWhiteSpace(pair.Value.English) ||
-                FormatArguments(pair.Value.English) != arguments)
-                issues.Add("en-US: " + pair.Key);
+            void Check(string language, string? translated)
+            {
+                if (string.IsNullOrWhiteSpace(translated) || FormatArguments(translated) != arguments)
+                    issues.Add(language + ": " + pair.Key);
+            }
+            Check("zh-TW", pair.Value.TraditionalChinese);
+            Check("en-US", pair.Value.English);
+            JapaneseEntries.TryGetValue(pair.Key, out string? japanese);
+            KoreanEntries.TryGetValue(pair.Key, out string? korean);
+            Check("ja-JP", japanese);
+            Check("ko-KR", korean);
         }
+        foreach (string key in JapaneseEntries.Keys)
+            if (!Entries.ContainsKey(key)) issues.Add("ja-JP: unknown key " + key);
+        foreach (string key in KoreanEntries.Keys)
+            if (!Entries.ContainsKey(key)) issues.Add("ko-KR: unknown key " + key);
         return issues;
     }
 
@@ -70,8 +85,18 @@ public static partial class L
         return entries;
     }
 
+    private static Dictionary<string, string> CreateAdditionalDictionary(string language)
+    {
+        var entries = new Dictionary<string, string>(StringComparer.Ordinal);
+        if (language == "ja-JP") AddJapaneseTranslations(entries);
+        else if (language == "ko-KR") AddKoreanTranslations(entries);
+        return entries;
+    }
+
     static partial void AddSettingsTranslations(Dictionary<string, Translation> entries);
     static partial void AddApplicationTranslations(Dictionary<string, Translation> entries);
     static partial void AddSystemTranslations(Dictionary<string, Translation> entries);
     static partial void AddUpdateTranslations(Dictionary<string, Translation> entries);
+    static partial void AddJapaneseTranslations(Dictionary<string, string> entries);
+    static partial void AddKoreanTranslations(Dictionary<string, string> entries);
 }

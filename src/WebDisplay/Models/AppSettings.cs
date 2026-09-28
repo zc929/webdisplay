@@ -30,8 +30,8 @@ public sealed class AppSettings
 
     public void Validate()
     {
-        if (Language != "zh-CN" && Language != "zh-TW" && Language != "en-US")
-            throw new ArgumentException(L.Text("界面语言必须为简体中文、繁体中文或英文。"));
+        if (!L.IsSupportedLanguage(Language))
+            throw new ArgumentException(L.Text("请选择支持的界面语言。"));
         if (ThemePreference != "System" && ThemePreference != "Light" && ThemePreference != "Dark")
             throw new ArgumentException(L.Text("界面主题必须为跟随系统、浅色或深色。"));
         if (!IsValidUrl(Url)) throw new ArgumentException(L.Text("请输入完整的 http:// 或 https:// 网页地址，且不要在网址中包含账号密码。"));

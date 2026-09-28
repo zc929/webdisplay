@@ -52,7 +52,7 @@ public sealed partial class SettingsWindow : Window
         ShowScrollbarsToggle.IsOn = current.ShowScrollbars;
         IgnoreCertificateErrorsToggle.IsOn = current.IgnoreCertificateErrors;
         MutePageToggle.IsOn = current.MutePage;
-        LanguageBox.SelectedIndex = current.Language switch { "zh-TW" => 1, "en-US" => 2, _ => 0 };
+        LanguageBox.SelectedIndex = current.Language switch { "zh-TW" => 1, "en-US" => 2, "ja-JP" => 3, "ko-KR" => 4, _ => 0 };
         RefreshToggle.IsOn = current.AutoRefreshEnabled;
         RefreshMinutesBox.Text = current.RefreshIntervalMinutes.ToString(CultureInfo.InvariantCulture);
         TopmostToggle.IsOn = current.AlwaysOnTop;
@@ -164,7 +164,7 @@ public sealed partial class SettingsWindow : Window
             ["MON"] = L.Text("周一"), ["TUE"] = L.Text("周二"), ["WED"] = L.Text("周三"), ["THU"] = L.Text("周四"),
             ["FRI"] = L.Text("周五"), ["SAT"] = L.Text("周六"), ["SUN"] = L.Text("周日")
         };
-        return string.Join(L.Language == "en-US" ? ", " : "、", days.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+        return string.Join(L.Language is "en-US" or "ko-KR" ? ", " : "、", days.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
             .Select(day => names.TryGetValue(day, out var label) ? label : day));
     }
 

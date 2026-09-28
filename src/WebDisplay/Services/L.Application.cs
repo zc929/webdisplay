@@ -48,7 +48,7 @@ public static partial class L
         entries["无法启用防休眠，请检查系统策略"] = new("無法啟用防止睡眠，請檢查系統原則", "Could not keep the display awake. Check system policies.");
         entries["正在重新应用 HTTPS 证书设置…"] = new("正在重新套用 HTTPS 憑證設定…", "Applying HTTPS certificate settings…");
         entries["正在关闭旧网页会话，证书设置应用后将重新加载"] = new("正在關閉舊網頁工作階段，憑證設定套用後將重新載入", "Closing the previous browser session. The page will reload after applying certificate settings.");
-        entries["界面语言必须为简体中文、繁体中文或英文。"] = new("介面語言必須為簡體中文、繁體中文或英文。", "Choose Simplified Chinese, Traditional Chinese, or English.");
+        entries["请选择支持的界面语言。"] = new("請選擇支援的介面語言。", "Choose a supported interface language.");
         entries["界面主题必须为跟随系统、浅色或深色。"] = new("介面主題必須為跟隨系統、淺色或深色。", "Choose the system, light, or dark theme.");
         entries["请输入完整的 http:// 或 https:// 网页地址，且不要在网址中包含账号密码。"] = new("請輸入完整的 http:// 或 https:// 網頁位址，且不要在網址中包含帳號密碼。", "Enter a complete http:// or https:// address without a username or password.");
         entries["网页缩放比例应为 25 到 500 的整数百分比。"] = new("網頁縮放比例應為 25 到 500 的整數百分比。", "Page zoom must be a whole percentage from 25 to 500.");

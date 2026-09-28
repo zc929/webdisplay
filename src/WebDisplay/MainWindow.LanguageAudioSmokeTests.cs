@@ -20,7 +20,7 @@ public sealed partial class MainWindow
     {
         AssertPageMutedForSmoke(false);
         await _browser!.CoreWebView2.ExecuteScriptAsync("window.webDisplayUiToken='kept';");
-        foreach (string language in new[] { "en-US", "zh-TW", "zh-CN" })
+        foreach (string language in new[] { "en-US", "zh-TW", "ja-JP", "ko-KR", "zh-CN" })
         {
             await SaveLanguageAndAudioFromUiForSmokeAsync(language, true);
             AssertPageMutedForSmoke(true);
@@ -90,8 +90,15 @@ public sealed partial class MainWindow
             await Task.Delay(350);
             await SavePreviewAsync(root, "settings-" + language + "-audio-" + name + ".png");
             pivot.SelectedIndex = 1;
+            ((FrameworkElement)root.FindName("LocalizedElement025")).StartBringIntoView(new BringIntoViewOptions { AnimationDesired = false, VerticalAlignmentRatio = 0 });
             await Task.Delay(800);
             await SavePreviewAsync(root, "settings-" + language + "-system-" + name + ".png");
+            if (language is "ja-JP" or "ko-KR")
+            {
+                ((FrameworkElement)root.FindName("AccountPasswordBox")).StartBringIntoView(new BringIntoViewOptions { AnimationDesired = false, VerticalAlignmentRatio = 0 });
+                await Task.Delay(350);
+                await SavePreviewAsync(root, "settings-" + language + "-account-" + name + ".png");
+            }
         }
         dialog.Close();
         if (await closed || L.Language != language || _settings.Language != language)

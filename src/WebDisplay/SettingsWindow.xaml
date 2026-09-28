@@ -59,6 +59,8 @@
                                     <ComboBoxItem Content="简体中文" Tag="zh-CN"/>
                                     <ComboBoxItem Content="繁體中文" Tag="zh-TW"/>
                                     <ComboBoxItem Content="English" Tag="en-US"/>
+                                    <ComboBoxItem Content="日本語" Tag="ja-JP"/>
+                                    <ComboBoxItem Content="한국어" Tag="ko-KR"/>
                                 </ComboBox>
                             </Grid>
                         </Border>
