@@ -23,7 +23,7 @@
   #define KoreanLanguageFile "languages\Korean.isl"
 #endif
 #ifndef AppVersion
-  #define AppVersion "2.6.1"
+  #define AppVersion "2.6.2"
 #endif
 #define AppExeName "WebDisplay.exe"
 

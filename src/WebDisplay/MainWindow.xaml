@@ -3,6 +3,19 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Title="网页展示器">
  <Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <Grid.Resources>
+   <Style x:Key="StatusBarTextStyle" TargetType="TextBlock">
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="Foreground" Value="{ThemeResource TextFillColorSecondaryBrush}"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+   </Style>
+   <Style x:Key="StatusBarSectionStyle" TargetType="Border">
+    <Setter Property="Background" Value="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+    <Setter Property="Padding" Value="20,8"/>
+    <Setter Property="BorderBrush" Value="{ThemeResource DividerStrokeColorDefaultBrush}"/>
+    <Setter Property="BorderThickness" Value="0,1,0,0"/>
+   </Style>
+  </Grid.Resources>
   <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
   <Border x:Name="Toolbar" Grid.ColumnSpan="2" Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="20,12">
@@ -20,13 +33,21 @@
    <InfoBar.ActionButton><Button x:Name="RetryButton" Content="立即重试" Click="RefreshClick"/></InfoBar.ActionButton>
   </InfoBar>
   <Grid x:Name="BrowserHost" Grid.Row="2" Grid.ColumnSpan="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
-  <Border x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Padding="20,8" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
-   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="StatusText" Text="准备就绪" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><TextBlock x:Name="ShortcutHintText" Grid.Column="1" Margin="16,0,0,0" Text="F11 全屏  ·  Esc 返回  ·  Ctrl+, 设置" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></Grid>
+  <Border x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Style="{StaticResource StatusBarSectionStyle}">
+   <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="StatusText" Text="准备就绪" TextWrapping="Wrap" Style="{StaticResource StatusBarTextStyle}"/><TextBlock x:Name="ShortcutHintText" Grid.Column="1" Margin="16,0,0,0" Text="F11 全屏  ·  Esc 返回  ·  Ctrl+, 设置" Style="{StaticResource StatusBarTextStyle}"/></Grid>
   </Border>
-  <Border x:Name="VersionBadge" Grid.Row="3" Grid.Column="1" Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="12,6" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+  <Border x:Name="VersionBadge" Grid.Row="3" Grid.Column="1" Style="{StaticResource StatusBarSectionStyle}">
    <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-    <TextBlock x:Name="CurrentVersionText" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
-    <Button x:Name="UpdateButton" Click="UpdateClick" Padding="8,3" MinHeight="28" MinWidth="0"><TextBlock x:Name="UpdateButtonText" Text="检查更新" FontSize="12" MaxWidth="240" TextTrimming="CharacterEllipsis"/></Button>
+    <TextBlock x:Name="CurrentVersionText" Style="{StaticResource StatusBarTextStyle}"/>
+    <HyperlinkButton x:Name="UpdateButton" Click="UpdateClick" Padding="0" MinHeight="0" MinWidth="0" BorderThickness="0" CornerRadius="0" VerticalAlignment="Center" UseSystemFocusVisuals="True" Foreground="{ThemeResource TextFillColorSecondaryBrush}">
+     <HyperlinkButton.Resources>
+      <SolidColorBrush x:Key="HyperlinkButtonBackground" Color="Transparent"/>
+      <SolidColorBrush x:Key="HyperlinkButtonBackgroundPointerOver" Color="Transparent"/>
+      <SolidColorBrush x:Key="HyperlinkButtonBackgroundPressed" Color="Transparent"/>
+      <SolidColorBrush x:Key="HyperlinkButtonBackgroundDisabled" Color="Transparent"/>
+     </HyperlinkButton.Resources>
+     <TextBlock x:Name="UpdateButtonText" Text="检查更新" Style="{StaticResource StatusBarTextStyle}" MaxWidth="240" TextTrimming="CharacterEllipsis"/>
+    </HyperlinkButton>
    </StackPanel>
   </Border>
  </Grid>

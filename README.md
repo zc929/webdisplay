@@ -1,8 +1,8 @@
-# WebDisplay 网页展示工具 2.6.1
+# WebDisplay 网页展示工具 2.6.2
 
 **简体中文** | [English](README.en.md)
 
-基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.1 新增日本語和 한국어 界面及安装语言，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
+基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.2 统一右下角版本区域与左侧状态栏的样式。2.6.1 新增的日本語和 한국어 界面及安装语言继续保留，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
 
 [下载最新版](https://github.com/zc929/webdisplay/releases/latest) · [历史版本](https://github.com/zc929/webdisplay/releases)
 
@@ -43,7 +43,7 @@
 
 下载最新版本：[安装包与便携版](https://github.com/zc929/webdisplay/releases/latest)。 [查看历史版本](https://github.com/zc929/webdisplay/releases)。
 
-推荐运行安装包 `dist\WebDisplay-Setup-2.6.1-x64.exe`。安装器提供简体中文、繁體中文、English、日本語和 한국어；程序内的界面语言可在安装后单独选择。默认只为当前 Windows 用户安装到：
+推荐运行安装包 `dist\WebDisplay-Setup-2.6.2-x64.exe`。安装器提供简体中文、繁體中文、English、日本語和 한국어；程序内的界面语言可在安装后单独选择。默认只为当前 Windows 用户安装到：
 
 ```text
 %LOCALAPPDATA%\Programs\WebDisplay
@@ -227,7 +227,7 @@ XAML 编译器与 Windows 构建工具来自 NuGet；XAML 编译器需要 .NET F
 
 `--self-test` 执行不依赖展示窗口的安全检查，不实际设置自动登录、启动项或重启电脑。自检不能替代目标机器上的界面与管理员功能验证。
 
-自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言；实际范围见 [验证记录](VALIDATION.md)。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
+自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.2 已重新编译并通过 28 项自检，程序版本已核对；交付核对结果见 [验证记录](VALIDATION.md)。历史版本 2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
 
 运行包含 HTTPS 检查的开发冒烟测试 `--smoke-test` 需要本机安装 Node.js。程序优先读取 `WEBDISPLAY_TEST_NODE` 环境变量中指定的绝对 `node.exe` 路径，未设置时从 `PATH` 查找。该测试使用 Node 内置 HTTPS 在本机提供临时自签名服务，证书和私钥仅保存在内存中，不写入密钥文件或 Windows 信任库。正常使用、`--self-test` 和安装包均不依赖 Node.js。
 

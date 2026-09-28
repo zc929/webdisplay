@@ -100,7 +100,6 @@ public sealed partial class MainWindow
             : L.Text("每 6 小时自动检查更新，点击立即检查"));
         UpdateButton.IsEnabled = !_openingReleasePage && (_availableUpdate != null ||
             (!_updateChecking && DateTimeOffset.UtcNow >= _nextManualUpdateCheck));
-        UpdateButton.Style = (Style)Application.Current.Resources[_availableUpdate != null ? "AccentButtonStyle" : "DefaultButtonStyle"];
         if (_availableUpdate != null && _availableUpdate.LatestVersion != _acknowledgedUpdateVersion)
             _updateBlinkTimer.Start();
         else
@@ -155,6 +154,10 @@ public sealed partial class MainWindow
         Grid.SetColumn(VersionBadge, _isFullscreen ? 0 : 1);
         Grid.SetColumnSpan(VersionBadge, _isFullscreen ? 2 : 1);
         VersionBadge.Margin = _isFullscreen ? new Thickness(12) : new Thickness(0);
+        VersionBadge.HorizontalAlignment = _isFullscreen ? HorizontalAlignment.Right : HorizontalAlignment.Stretch;
+        VersionBadge.VerticalAlignment = _isFullscreen ? VerticalAlignment.Bottom : VerticalAlignment.Stretch;
+        if (_isFullscreen) VersionBadge.BorderThickness = new Thickness(0);
+        else VersionBadge.ClearValue(Border.BorderThicknessProperty);
     }
 
     private void StopUpdateChecks()
