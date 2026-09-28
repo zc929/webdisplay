@@ -26,6 +26,7 @@ public sealed partial class MainWindow
         ShortcutHintText.Text = L.Text("F11 全屏  ·  Esc 返回  ·  Ctrl+, 设置");
         RecoveryBanner.Title = L.Text("等待恢复");
         RetryButton.Content = L.Text("立即重试");
+        RenderUpdateIndicator();
         if (changed && _tray != null)
         {
             _tray.Dispose();

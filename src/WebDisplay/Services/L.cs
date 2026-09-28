@@ -66,10 +66,12 @@ public static partial class L
         AddSettingsTranslations(entries);
         AddApplicationTranslations(entries);
         AddSystemTranslations(entries);
+        AddUpdateTranslations(entries);
         return entries;
     }
 
     static partial void AddSettingsTranslations(Dictionary<string, Translation> entries);
     static partial void AddApplicationTranslations(Dictionary<string, Translation> entries);
     static partial void AddSystemTranslations(Dictionary<string, Translation> entries);
+    static partial void AddUpdateTranslations(Dictionary<string, Translation> entries);
 }

@@ -136,6 +136,15 @@ internal static class SelfTests
             Assert(store.Load().Url == new AppSettings().Url && store.LoadWarning != null);
             store.Save(expected);
         });
+        try
+        {
+            foreach (string name in UpdateServiceTests.RunAll()) checks.Add(new { name, passed = true });
+        }
+        catch (Exception ex)
+        {
+            failures++;
+            checks.Add(new { name = "Offline GitHub update-service checks", passed = false, error = ex.Message });
+        }
         File.WriteAllText(Path.Combine(directory, "self-test-result.json"), JsonSerializer.Serialize(new { passed = failures == 0, total = checks.Count, failures, checks }, new JsonSerializerOptions { WriteIndented = true }));
         return failures == 0 ? 0 : 1;
     }

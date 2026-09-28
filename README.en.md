@@ -1,10 +1,10 @@
-# WebDisplay 2.5.0
+# WebDisplay 2.6.0
 
 [简体中文](README.md) | **English**
 
 A Windows desktop app for keeping a website on a display screen. Built with C#, .NET 10, WinUI 3, and Microsoft Edge WebView2, WebDisplay supports full screen, automatic refresh and recovery, page zoom, and unattended display settings.
 
-Version **2.5.0** adds **Simplified Chinese, Traditional Chinese, and English** interface languages, plus a **page mute** option that takes effect without reloading the website.
+Version **2.6.0** adds a current-version indicator in the bottom-right corner and update notices for official GitHub releases, with automatic and manual checks. It retains **Simplified Chinese, Traditional Chinese, and English** interface languages, page mute, and the existing display controls.
 
 [Download the latest version](https://github.com/zc929/webdisplay/releases/latest) · [All releases](https://github.com/zc929/webdisplay/releases)
 
@@ -23,6 +23,7 @@ These are real WebDisplay 2.5.0 screenshots using a local demo URL and example s
 ## Features
 
 - Open a chosen website and optionally refresh it at an interval measured in minutes.
+- See the current version at the bottom right, check GitHub releases automatically or manually, and open a blinking update link when a newer stable release is available.
 - Choose Simplified Chinese (the default), Traditional Chinese, or English; save to apply the language immediately.
 - Mute audio from this app's webpage without changing system volume or other apps.
 - Set page zoom from **25% to 500%**, with **100%** as the default.
@@ -37,7 +38,7 @@ On first launch, WebDisplay opens Settings in Simplified Chinese. Page mute, cer
 
 ## Install and run
 
-Download **`WebDisplay-Setup-2.5.0-x64.exe`** from the [latest release](https://github.com/zc929/webdisplay/releases/latest). The installer supports Simplified Chinese, Traditional Chinese, and English. You can choose the app's interface language separately after installation.
+Download **`WebDisplay-Setup-2.6.0-x64.exe`** from the [latest release](https://github.com/zc929/webdisplay/releases/latest). The installer supports Simplified Chinese, Traditional Chinese, and English. You can choose the app's interface language separately after installation.
 
 The default installation is for the current Windows user, without requiring administrator rights to install WebDisplay itself:
 
@@ -54,6 +55,16 @@ For portable deployment, extract **all files** from `WebDisplay-WinUI3-win-x64.z
 The release targets **Windows x64**; the project's minimum Windows target version is `10.0.19041.0`. The multi-file package includes .NET 10 and WinUI 3 runtime dependencies. **WebView2 Runtime is still required**, and extracting the ZIP does not run the installer's dependency checks. This build does not have commercial code signing, so the publisher will not appear as a trusted software vendor on first launch.
 
 Website access, network connectivity, and website authentication remain the website's responsibility. Windows automatic sign-in opens the Windows desktop; it does not enter website credentials.
+
+## Version and update notices
+
+The current version and a **Check for updates** button appear at the bottom right of the window, with a small overlay retained in full-screen mode. In a narrow window, the shortcut hint hides automatically to leave room for the status and version area. WebDisplay checks the [latest official GitHub release](https://github.com/zc929/webdisplay/releases/latest) in the background after startup and normally every **6 hours** thereafter. Failed checks retry after **30 minutes** by default, or later if required by GitHub API rate limits. Offline or failed checks do not interrupt the displayed website.
+
+Click **Check for updates** beside the version number to check manually. The result shows that you are up to date, an update is available, or the check failed. You can use the same button again after the cooldown. Manual checks must be at least **1 minute** apart and cannot bypass an API rate-limit waiting period. Only a stable release newer than the running version triggers a notice; drafts and prereleases do not.
+
+When an update is available, its link blinks slowly. If Windows animations are disabled, the notice stays static. Clicking the update link opens that version's official GitHub release page in the external default browser and stops blinking for that notice; the update link remains available. The notice follows the saved Simplified Chinese, Traditional Chinese, or English interface language.
+
+WebDisplay **does not automatically download or install updates**. Choose the installer or portable package on the release page and follow the upgrade instructions below. Update checks retain normal HTTPS certificate validation, independent of the webpage's certificate-error bypass option.
 
 ## Language, audio, and display settings
 
@@ -172,7 +183,7 @@ Use `-SkipInstaller` to skip the installer. Build outputs are:
 | --- | --- |
 | Multi-file app | `dist\WebDisplay-WinUI3-win-x64\WebDisplay.exe` |
 | Portable ZIP | `dist\WebDisplay-WinUI3-win-x64.zip` |
-| Installer | `dist\WebDisplay-Setup-2.5.0-x64.exe` |
+| Installer | `dist\WebDisplay-Setup-2.6.0-x64.exe` |
 | Source ZIP | `dist\WebDisplay-WinUI3-source.zip` |
 | Source project | `src\WebDisplay\WebDisplay.csproj` |
 
@@ -198,4 +209,4 @@ The HTTPS smoke checks require a local Node.js installation. Set `WEBDISPLAY_TES
 
 The smoke test temporarily opens windows, requests and releases sleep prevention, and terminates and recreates its own test browser process. Run it in an interactive Windows session. Results and preview images are written to the test data directory.
 
-The 2.5.0 validation record reports **23 self-checks and 48 real WinUI 3 / WebView2 runtime checks passed**, plus an installation upgrade from 2.4.0 and uninstall verification. See [the full validation record in Chinese](VALIDATION.md) for coverage and limitations. Audible output on the target device, administrator authorization, actual automatic sign-in and restarts, domain policy, website authentication, mixed-DPI monitors, missing-Runtime installation, and extended unattended operation still need validation in the deployment environment.
+Version 2.6.0 passed Release compilation, **28 self-checks with zero failures**, and **55 real WinUI 3 / WebView2 runtime checks**, including seven new update-interface checks. Coverage includes three languages, both themes, a narrow window, full screen, request overlap prevention, rate-limit scheduling, and release-link handling through an injected browser launcher. Separate installer checks passed an upgrade from 2.5.0, verified all 471 installed payload files, passed 28 installed self-checks, and confirmed uninstall completion. The full six-hour checking interval and a real external-browser launch remain untested. Windows animations were enabled during the run; the disabled-animation branch was reviewed but not exercised by changing the system setting. The 2.5.0 installation and uninstall records remain as history. See [the full validation record in Chinese](VALIDATION.md) for coverage and limitations. Audible output on the target device, administrator authorization, actual automatic sign-in and restarts, domain policy, website authentication, mixed-DPI monitors, missing-Runtime installation, and extended unattended operation still need validation in the deployment environment.

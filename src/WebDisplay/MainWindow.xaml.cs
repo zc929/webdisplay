@@ -51,6 +51,8 @@ public sealed partial class MainWindow : Window
         if (smoke) _settings = new AppSettings { FullScreen = false, PreventSleep = false };
         L.SetLanguage(_settings.Language);
         InitializeComponent();
+        InitializeUpdateChecks();
+        StatusBar.SizeChanged += (_, _) => ShortcutHintText.Visibility = StatusBar.ActualWidth >= 700 ? Visibility.Visible : Visibility.Collapsed;
         ApplyInterfaceLanguage();
         WindowInteropService.Initialize(this, 1200, 800);
         _theme = new ThemeService(this, RootGrid, _settings.ThemePreference);
@@ -91,7 +93,7 @@ public sealed partial class MainWindow : Window
             ApplyDisplaySettings();
             _timer.Start();
             if (_smoke) await RunSmokeTestAsync();
-            else await InitializeBrowserAsync();
+            else { StartUpdateChecks(); await InitializeBrowserAsync(); }
         }
         catch (Exception ex)
         {
@@ -507,6 +509,7 @@ public sealed partial class MainWindow : Window
         }
         _isFullscreen = enabled;
         Toolbar.Visibility = StatusBar.Visibility = enabled ? Visibility.Collapsed : Visibility.Visible;
+        UpdateVersionBadgePlacement();
         SetTopmost(_settings.AlwaysOnTop);
     }
 
@@ -530,6 +533,7 @@ public sealed partial class MainWindow : Window
     private void OnClosed(object sender, WindowEventArgs args)
     {
         _closing = true;
+        StopUpdateChecks();
         _timer.Stop();
         NetworkChange.NetworkAvailabilityChanged -= OnNetworkAvailabilityChanged;
         _power.Dispose();

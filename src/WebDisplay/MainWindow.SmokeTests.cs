@@ -37,6 +37,7 @@ public sealed partial class MainWindow
             await RunScrollbarSmokeChecksAsync();
             await RunZoomSmokeChecksAsync();
             await RunLanguageAudioSmokeChecksAsync();
+            await RunUpdateSmokeChecksAsync();
             int requests = server.RequestCount;
             _settings.AutoRefreshEnabled = true;
             _refreshAt = DateTimeOffset.Now.AddMilliseconds(200);

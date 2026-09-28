@@ -3,8 +3,9 @@
  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
  Title="网页展示器">
  <Grid x:Name="RootGrid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+  <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
   <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-  <Border x:Name="Toolbar" Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="20,12">
+  <Border x:Name="Toolbar" Grid.ColumnSpan="2" Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,0,0,1" Padding="20,12">
    <Grid ColumnSpacing="20">
     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
     <StackPanel VerticalAlignment="Center" Spacing="2"><TextBlock x:Name="AppTitleText" Text="网页展示器" Style="{StaticResource SubtitleTextBlockStyle}"/><TextBlock x:Name="AddressText" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" TextTrimming="CharacterEllipsis"/></StackPanel>
@@ -15,12 +16,18 @@
     </StackPanel>
    </Grid>
   </Border>
-  <InfoBar x:Name="RecoveryBanner" Grid.Row="1" IsOpen="False" IsClosable="False" Severity="Warning" Title="等待恢复">
+  <InfoBar x:Name="RecoveryBanner" Grid.Row="1" Grid.ColumnSpan="2" IsOpen="False" IsClosable="False" Severity="Warning" Title="等待恢复">
    <InfoBar.ActionButton><Button x:Name="RetryButton" Content="立即重试" Click="RefreshClick"/></InfoBar.ActionButton>
   </InfoBar>
-  <Grid x:Name="BrowserHost" Grid.Row="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
-  <Border x:Name="StatusBar" Grid.Row="3" Padding="20,8" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
+  <Grid x:Name="BrowserHost" Grid.Row="2" Grid.ColumnSpan="2" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"/>
+  <Border x:Name="StatusBar" Grid.Row="3" Grid.Column="0" Padding="20,8" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="0,1,0,0">
    <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="StatusText" Text="准备就绪" TextWrapping="Wrap" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/><TextBlock x:Name="ShortcutHintText" Grid.Column="1" Margin="16,0,0,0" Text="F11 全屏  ·  Esc 返回  ·  Ctrl+, 设置" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}"/></Grid>
+  </Border>
+  <Border x:Name="VersionBadge" Grid.Row="3" Grid.Column="1" Background="{ThemeResource LayerFillColorDefaultBrush}" BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}" BorderThickness="1" CornerRadius="8" Padding="12,6" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+   <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+    <TextBlock x:Name="CurrentVersionText" FontSize="12" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center"/>
+    <Button x:Name="UpdateButton" Click="UpdateClick" Padding="8,3" MinHeight="28" MinWidth="0"><TextBlock x:Name="UpdateButtonText" Text="检查更新" FontSize="12" MaxWidth="240" TextTrimming="CharacterEllipsis"/></Button>
+   </StackPanel>
   </Border>
  </Grid>
 </Window>
