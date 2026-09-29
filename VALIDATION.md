@@ -1,8 +1,12 @@
 # WebDisplay 2.6.3 WinUI 3 验证记录
 
-本版将用户提供的 `icon.png` 用作程序图标，并把应用及安装包版本统一更新为 2.6.3。原图保留在 `src/WebDisplay/Assets/icon.png`，多尺寸 `app.ico` 包含 16、20、24、32、40、48、64、96、128 和 256 像素版本。应用 EXE、窗口、托盘、安装/卸载程序及快捷方式沿用现有图标资源引用。
+本轮按用户要求使用 `dist/icon.jpg` 替换图标，并制作透明圆角效果，版本保持 2.6.3。原稿保留为 `src/WebDisplay/Assets/icon.jpg`，透明圆角结果为 `src/WebDisplay/Assets/icon.png`，实际用于应用和安装包的多尺寸资源为 `src/WebDisplay/Assets/app.ico`。EXE、窗口、托盘、安装/卸载程序及快捷方式沿用现有资源引用。
 
-本轮验证范围为 Release 构建、28 项现有自检、程序集和安装包版本核对，以及最终程序/安装包图标资源和交付归档校验。实际结果记录在 `artifacts/version-263-validation`；新安装包为 `dist/WebDisplay-Setup-2.6.3-x64.exe`。当前运行中的旧发布目录保持不变，新程序从独立构建目录打包。完整界面和安装升级检查沿用下述历史记录，不表示本轮重新运行。
+本轮验证覆盖 Release 构建、28 项现有自检、版本号、圆角透明像素及实际内嵌图标；结果以 `artifacts/rounded-icon-validation` 中生成的报告为准；安装包仍为 `dist/WebDisplay-Setup-2.6.3-x64.exe`。前轮记录单独保留如下，完整界面及安装升级检查仍为历史结果。
+
+## 前轮 2.6.3 图标记录（历史）
+
+前轮使用用户提供的 `icon.png`，将应用及安装包版本更新为 2.6.3，多尺寸 ICO 包含 16、20、24、32、40、48、64、96、128 和 256 像素版本。对应构建、自检、版本、图标资源及交付归档记录位于 `artifacts/version-263-validation`。当时的 `src/WebDisplay/Assets/icon.png` 是 PNG 原稿；本轮该路径改为 JPG 原稿生成的透明圆角结果。前轮从独立目录构建以保留正在运行的旧程序。完整界面和安装升级检查沿用下述历史记录，不表示本轮重新运行。
 
 ---
 

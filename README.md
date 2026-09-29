@@ -2,7 +2,7 @@
 
 **简体中文** | [English](README.en.md)
 
-基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.3 替换为用户提供的新程序图标，并保留 2.6.2 统一后的右下角版本区域与左侧状态栏样式。2.6.1 新增的日本語和 한국어 界面及安装语言继续保留，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
+基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.3 使用用户提供的新图案制作透明圆角程序图标，并保留 2.6.2 统一后的右下角版本区域与左侧状态栏样式。2.6.1 新增的日本語和 한국어 界面及安装语言继续保留，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
 
 [下载最新版](https://github.com/zc929/webdisplay/releases/latest) · [历史版本](https://github.com/zc929/webdisplay/releases)
 
@@ -187,6 +187,8 @@
 
 ## 构建与自检
 
+本轮图标原稿保留在 `src/WebDisplay/Assets/icon.jpg`，透明圆角结果为 `src/WebDisplay/Assets/icon.png`，实际用于程序和安装包的多尺寸图标为 `src/WebDisplay/Assets/app.ico`。版本保持 2.6.3。
+
 开发环境需要 Windows、PowerShell 7 和 .NET 10 SDK；首次还原需要访问 NuGet。目标框架为 `net10.0-windows10.0.26100.0`。本版本直接引用 `Microsoft.WindowsAppSDK.WinUI 2.3.6`、`Microsoft.WindowsAppSDK.InteractiveExperiences 2.1.6` 和 `Microsoft.Windows.SDK.BuildTools 10.0.26100.9169`，按依赖关系引入 Foundation、Base 和 WebView2。还原后的完整依赖清单见 `src\WebDisplay\obj\project.assets.json`。
 
 XAML 编译器与 Windows 构建工具来自 NuGet；XAML 编译器需要 .NET Framework 4.7.2 或更高版本。生成安装包还需要 Inno Setup 6.7 或更高版本的 `ISCC.exe`，本次使用 Inno Setup 6.7.3。构建与运行检查记录见 `VALIDATION.md`。
@@ -227,7 +229,7 @@ XAML 编译器与 Windows 构建工具来自 NuGet；XAML 编译器需要 .NET F
 
 `--self-test` 执行不依赖展示窗口的安全检查，不实际设置自动登录、启动项或重启电脑。自检不能替代目标机器上的界面与管理员功能验证。
 
-自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.3 图标更新的构建、版本及图标资源校验范围见 [验证记录](VALIDATION.md)，实际结果以对应的验证报告为准。历史版本 2.6.2 已重新编译并通过 28 项自检，程序版本已核对。历史版本 2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
+自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.3 本轮透明圆角图标的构建及图标资源验证结果以 `artifacts/rounded-icon-validation` 报告为准，范围见 [验证记录](VALIDATION.md)。历史版本 2.6.2 已重新编译并通过 28 项自检，程序版本已核对。历史版本 2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
 
 运行包含 HTTPS 检查的开发冒烟测试 `--smoke-test` 需要本机安装 Node.js。程序优先读取 `WEBDISPLAY_TEST_NODE` 环境变量中指定的绝对 `node.exe` 路径，未设置时从 `PATH` 查找。该测试使用 Node 内置 HTTPS 在本机提供临时自签名服务，证书和私钥仅保存在内存中，不写入密钥文件或 Windows 信任库。正常使用、`--self-test` 和安装包均不依赖 Node.js。
 
