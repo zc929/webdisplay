@@ -17,6 +17,7 @@ public sealed partial class MainWindow
         string language = _settings.Language;
         var opener = _openReleasePage;
         var oldTheme = RootGrid.RequestedTheme;
+        bool oldFullscreenSetting = _settings.FullScreen;
         string availableVersion = "99.0.0";
         var releaseUri = new Uri("https://github.com/zc929/webdisplay/releases/tag/v99.0.0");
         try
@@ -28,6 +29,11 @@ public sealed partial class MainWindow
             Require(UpdateButtonText.Text == L.Text("已是最新版本") && !_updateBlinkTimer.IsEnabled,
                 "Up-to-date response should have no flashing notification");
             _smokeChecks.Add("Assembly version and current-release state appear in the lower-right corner");
+            SetFullscreen(true);
+            await AssertFullscreenLayoutAsync("No update available");
+            SetFullscreen(false);
+            await AssertWindowedIndicatorAsync("Exit with no update available");
+            _smokeChecks.Add("Fullscreen hides the version and update controls even when no update is available");
 
             var priorSize = AppWindow.Size;
             _settings.Language = "en-US";
@@ -81,16 +87,69 @@ public sealed partial class MainWindow
             }
             _smokeChecks.Add("Update indicator supports all five interface languages in dark and light themes");
 
-            SetFullscreen(true);
-            await Task.Delay(300);
-            Require(StatusBar.Visibility == Visibility.Collapsed && Grid.GetRow(VersionBadge) == 2 &&
-                VersionBadge.Visibility == Visibility.Visible && VersionBadge.ActualWidth > 0 &&
-                Grid.GetColumnSpan(VersionBadge) == 2, "Fullscreen update overlay missing");
-            await SavePreviewAsync(RootGrid, "updates-fullscreen.png");
-            SetFullscreen(false);
-            Require(Grid.GetRow(VersionBadge) == 3 && Grid.GetColumn(VersionBadge) == 1, "Version badge did not return to status bar");
-            _smokeChecks.Add("Fullscreen keeps the small update overlay and restores the normal status corner");
+            async Task AssertFullscreenLayoutAsync(string phase)
+            {
+                await WaitForConditionAsync(() => _isFullscreen &&
+                    Toolbar.Visibility == Visibility.Collapsed && StatusBar.Visibility == Visibility.Collapsed &&
+                    VersionBadge.Visibility == Visibility.Collapsed && !RecoveryBanner.IsOpen &&
+                    RootGrid.RowDefinitions[3].ActualHeight < 0.5 && BrowserHost.ActualHeight > 0 &&
+                    Math.Abs(BrowserHost.ActualHeight - RootGrid.ActualHeight) < 1,
+                    phase + ": fullscreen hides all status content without reserving bottom space", 5);
+                Require(Grid.GetRow(VersionBadge) == 3 && Grid.GetColumn(VersionBadge) == 1 &&
+                    Grid.GetColumnSpan(VersionBadge) == 1, "Fullscreen moved the version indicator over the webpage");
+            }
 
+            async Task AssertWindowedIndicatorAsync(string phase)
+            {
+                await WaitForConditionAsync(() => !_isFullscreen &&
+                    Toolbar.Visibility == Visibility.Visible && StatusBar.Visibility == Visibility.Visible &&
+                    VersionBadge.Visibility == Visibility.Visible && VersionBadge.ActualWidth > 0 &&
+                    RootGrid.RowDefinitions[3].ActualHeight > 0,
+                    phase + ": windowed status and version indicator restored", 5);
+                Require(Grid.GetRow(VersionBadge) == 3 && Grid.GetColumn(VersionBadge) == 1 &&
+                    Grid.GetColumnSpan(VersionBadge) == 1 && CurrentVersionText.Text == AppVersion.Display,
+                    "Version indicator did not return to the normal status bar");
+            }
+
+            // A check started while windowed must remain hidden if it completes after entering fullscreen.
+            await CheckForUpdatesAsync(_ => Result(new(UpdateCheckStatus.UpToDate)));
+            var fullscreenPending = new TaskCompletionSource<UpdateCheckResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            Task fullscreenChecking = CheckForUpdatesAsync(_ => fullscreenPending.Task);
+            try
+            {
+                Require(_updateChecking, "Asynchronous fullscreen update check did not start");
+                ToggleFullscreen();
+                await AssertFullscreenLayoutAsync("Pending update check");
+                fullscreenPending.SetResult(new(UpdateCheckStatus.UpdateAvailable, availableVersion, releaseUri));
+                await fullscreenChecking;
+                Require(!_updateChecking && _availableUpdate?.ReleaseUri == releaseUri,
+                    "Fullscreen update callback did not retain the discovered release");
+                await AssertFullscreenLayoutAsync("New-release callback completed");
+                // Allow the existing blink timer to tick without requiring it to stop in fullscreen.
+                await Task.Delay(950);
+                await AssertFullscreenLayoutAsync("After update timer tick");
+                await SavePreviewAsync(RootGrid, "updates-fullscreen.png");
+            }
+            finally
+            {
+                fullscreenPending.TrySetCanceled();
+                await fullscreenChecking;
+            }
+            ToggleFullscreen();
+            await AssertWindowedIndicatorAsync("Exit after fullscreen release discovery");
+            Require(UpdateButton.IsEnabled && UpdateButtonText.Text == L.Format("发现新版本 {0}", availableVersion),
+                "Release found during fullscreen was not available after exit");
+            _smokeChecks.Add("An in-flight update callback stays hidden in fullscreen, reserves no bottom space, and restores the release link on exit");
+
+            // Repeat through the saved-display-settings path, now with a release already known.
+            _settings.FullScreen = true;
+            ApplyDisplaySettings();
+            await AssertFullscreenLayoutAsync("ApplyDisplaySettings with known update");
+            ToggleFullscreen();
+            await AssertWindowedIndicatorAsync("Repeated fullscreen exit");
+            Require(_availableUpdate?.ReleaseUri == releaseUri && UpdateButton.IsEnabled,
+                "Repeated fullscreen transitions lost the update link");
+            _smokeChecks.Add("Applying fullscreen settings also hides a known update, and repeated exits restore the normal status bar");
             await CheckForUpdatesAsync(_ => Result(new(UpdateCheckStatus.Unavailable, RetryAfter: TimeSpan.FromHours(2))));
             Require(_availableUpdate?.ReleaseUri == releaseUri && _nextUpdateCheck > DateTimeOffset.UtcNow.AddMinutes(119)
                 && _nextManualUpdateCheck > DateTimeOffset.UtcNow.AddMinutes(119), "Network failure lost release or ignored rate-limit wait");
@@ -111,6 +170,8 @@ public sealed partial class MainWindow
         finally
         {
             _settings.Language = language;
+            _settings.FullScreen = oldFullscreenSetting;
+            if (!_closing) SetFullscreen(oldFullscreenSetting);
             RootGrid.RequestedTheme = oldTheme;
             _availableUpdate = null;
             _lastUpdateStatus = null;

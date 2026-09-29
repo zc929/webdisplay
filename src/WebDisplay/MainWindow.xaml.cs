@@ -508,8 +508,7 @@ public sealed partial class MainWindow : Window
             }
         }
         _isFullscreen = enabled;
-        Toolbar.Visibility = StatusBar.Visibility = enabled ? Visibility.Collapsed : Visibility.Visible;
-        UpdateVersionBadgePlacement();
+        Toolbar.Visibility = StatusBar.Visibility = VersionBadge.Visibility = enabled ? Visibility.Collapsed : Visibility.Visible;
         SetTopmost(_settings.AlwaysOnTop);
     }
 

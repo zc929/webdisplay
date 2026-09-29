@@ -148,18 +148,6 @@ public sealed partial class MainWindow
         }
     }
 
-    private void UpdateVersionBadgePlacement()
-    {
-        Grid.SetRow(VersionBadge, _isFullscreen ? 2 : 3);
-        Grid.SetColumn(VersionBadge, _isFullscreen ? 0 : 1);
-        Grid.SetColumnSpan(VersionBadge, _isFullscreen ? 2 : 1);
-        VersionBadge.Margin = _isFullscreen ? new Thickness(12) : new Thickness(0);
-        VersionBadge.HorizontalAlignment = _isFullscreen ? HorizontalAlignment.Right : HorizontalAlignment.Stretch;
-        VersionBadge.VerticalAlignment = _isFullscreen ? VerticalAlignment.Bottom : VerticalAlignment.Stretch;
-        if (_isFullscreen) VersionBadge.BorderThickness = new Thickness(0);
-        else VersionBadge.ClearValue(Border.BorderThicknessProperty);
-    }
-
     private void StopUpdateChecks()
     {
         _updateTimer.Stop();

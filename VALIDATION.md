@@ -1,3 +1,13 @@
+# WebDisplay 2.6.4 WinUI 3 验证记录
+
+本版修复全屏展示时版本与更新区域遮挡网页的问题：进入全屏后隐藏整个区域，退出全屏后恢复窗口模式的版本和更新入口。沿用 2.6.3 的透明圆角图标及现有五种界面语言，安装包为 `dist/WebDisplay-Setup-2.6.4-x64.exe`。
+
+本轮 Release 编译通过，28 项自检和 61 项真实 WinUI 3 / WebView2 界面检查全部通过。全屏回归覆盖：无更新时隐藏；窗口模式发起检查、进入全屏后收到新版结果及闪烁计时触发后仍隐藏；从保存的全屏设置进入、反复退出后版本及更新链接恢复。真实布局检查确认底部行高度为零、网页区域填满可用高度。测试使用独立配置和本地网页，既有五语、缩放、静音、恢复与主题检查继续通过。结果及截图位于 `artifacts/fullscreen-version-validation/self-test` 和 `artifacts/fullscreen-version-validation/smoke-test`；最终交付归档核对以同目录下生成的 `release-result.json` 为准。
+
+以下保留既往版本的验证记录。历史记录中全屏保留版本浮层的行为属于旧版本，不再描述 2.6.4 的界面。
+
+---
+
 # WebDisplay 2.6.3 WinUI 3 验证记录
 
 本轮按用户要求使用 `dist/icon.jpg` 替换图标，并制作透明圆角效果，版本保持 2.6.3。原稿保留为 `src/WebDisplay/Assets/icon.jpg`，透明圆角结果为 `src/WebDisplay/Assets/icon.png`，实际用于应用和安装包的多尺寸资源为 `src/WebDisplay/Assets/app.ico`。EXE、窗口、托盘、安装/卸载程序及快捷方式沿用现有资源引用。

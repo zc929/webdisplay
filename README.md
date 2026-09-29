@@ -1,8 +1,8 @@
-# WebDisplay 网页展示工具 2.6.3
+# WebDisplay 网页展示工具 2.6.4
 
 **简体中文** | [English](README.en.md)
 
-基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.3 使用用户提供的新图案制作透明圆角程序图标，并保留 2.6.2 统一后的右下角版本区域与左侧状态栏样式。2.6.1 新增的日本語和 한국어 界面及安装语言继续保留，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
+基于 C#、.NET 10、WinUI 3 和 Microsoft Edge WebView2 的 Windows 桌面程序，用于在展示屏上持续打开指定网页。2.6.4 修复全屏展示时的界面遮挡：全屏时隐藏版本与更新区域，退出全屏后恢复。保留 2.6.3 的透明圆角程序图标和 2.6.2 统一后的状态栏样式。2.6.1 新增的日本語和 한국어 界面及安装语言继续保留，现支持简体中文、繁體中文、English、日本語和 한국어 五种语言。保留 2.6.0 引入的右下角当前版本显示与 GitHub 正式版更新提示，支持后台检查及点击手动检查，以及网页静音、HTTPS 证书、网页缩放和滚动条等既有功能。程序采用常规多文件发布并提供 Inno Setup 安装包，程序和运行依赖在安装时展开到固定目录，启动时直接加载。
 
 [下载最新版](https://github.com/zc929/webdisplay/releases/latest) · [历史版本](https://github.com/zc929/webdisplay/releases)
 
@@ -43,7 +43,7 @@
 
 下载最新版本：[安装包与便携版](https://github.com/zc929/webdisplay/releases/latest)。 [查看历史版本](https://github.com/zc929/webdisplay/releases)。
 
-推荐运行安装包 `dist\WebDisplay-Setup-2.6.3-x64.exe`。安装器提供简体中文、繁體中文、English、日本語和 한국어；程序内的界面语言可在安装后单独选择。默认只为当前 Windows 用户安装到：
+推荐运行安装包 `dist\WebDisplay-Setup-2.6.4-x64.exe`。安装器提供简体中文、繁體中文、English、日本語和 한국어；程序内的界面语言可在安装后单独选择。默认只为当前 Windows 用户安装到：
 
 ```text
 %LOCALAPPDATA%\Programs\WebDisplay
@@ -80,7 +80,7 @@
 
 ## 版本与更新提示
 
-窗口右下角显示当前版本和“检查更新”按钮；全屏时保留右下角的小浮层。窗口较窄时会自动隐藏快捷键提示，为状态文字和版本区域留出空间。程序启动后在后台检查 [GitHub 最新正式发布](https://github.com/zc929/webdisplay/releases/latest)，正常情况下每 6 小时检查一次。检查失败默认等待 30 分钟后重试；GitHub API 限流要求更长等待时，遵守该等待时间。离线或检查失败不会中断网页展示。
+窗口模式下，右下角显示当前版本和“检查更新”按钮；全屏时隐藏整个版本与更新区域，退出全屏后恢复显示。窗口较窄时会自动隐藏快捷键提示，为状态文字和版本区域留出空间。程序启动后在后台检查 [GitHub 最新正式发布](https://github.com/zc929/webdisplay/releases/latest)，正常情况下每 6 小时检查一次。检查失败默认等待 30 分钟后重试；GitHub API 限流要求更长等待时，遵守该等待时间。离线或检查失败不会中断网页展示。
 
 点击版本号旁的“检查更新”按钮可手动检查。检查后会显示“已是最新版本”、新版提示或检查失败提示；冷却结束后仍可点击该按钮再次检查。重复手动检查至少间隔 1 分钟，并且不能跳过 API 限流等待。只有比当前版本更新的正式版会触发更新提示，草稿和预发行版不提示。
 
@@ -187,7 +187,7 @@
 
 ## 构建与自检
 
-本轮图标原稿保留在 `src/WebDisplay/Assets/icon.jpg`，透明圆角结果为 `src/WebDisplay/Assets/icon.png`，实际用于程序和安装包的多尺寸图标为 `src/WebDisplay/Assets/app.ico`。版本保持 2.6.3。
+沿用 2.6.3 的圆角图标：原稿保留在 `src/WebDisplay/Assets/icon.jpg`，透明圆角结果为 `src/WebDisplay/Assets/icon.png`，实际用于程序和安装包的多尺寸图标为 `src/WebDisplay/Assets/app.ico`。
 
 开发环境需要 Windows、PowerShell 7 和 .NET 10 SDK；首次还原需要访问 NuGet。目标框架为 `net10.0-windows10.0.26100.0`。本版本直接引用 `Microsoft.WindowsAppSDK.WinUI 2.3.6`、`Microsoft.WindowsAppSDK.InteractiveExperiences 2.1.6` 和 `Microsoft.Windows.SDK.BuildTools 10.0.26100.9169`，按依赖关系引入 Foundation、Base 和 WebView2。还原后的完整依赖清单见 `src\WebDisplay\obj\project.assets.json`。
 
@@ -229,7 +229,7 @@ XAML 编译器与 Windows 构建工具来自 NuGet；XAML 编译器需要 .NET F
 
 `--self-test` 执行不依赖展示窗口的安全检查，不实际设置自动登录、启动项或重启电脑。自检不能替代目标机器上的界面与管理员功能验证。
 
-自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.3 本轮透明圆角图标的构建及图标资源验证结果以 `artifacts/rounded-icon-validation` 报告为准，范围见 [验证记录](VALIDATION.md)。历史版本 2.6.2 已重新编译并通过 28 项自检，程序版本已核对。历史版本 2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
+自检结果写入数据目录中的 `self-test-result.json`。真实浏览器测试可运行 `--smoke-test`。2.6.4 的验证范围包括 Release 构建、自检和真实界面回归，重点检查全屏隐藏版本与更新区域、退出全屏恢复；实际结果见 `artifacts/fullscreen-version-validation` 报告及 [验证记录](VALIDATION.md)。2.6.3 圆角图标的历史构建与图标资源记录位于 `artifacts/rounded-icon-validation`。历史版本 2.6.2 已重新编译并通过 28 项自检，程序版本已核对。历史版本 2.6.1 已通过 Release 编译、28 项自检和 59 项真实运行检查，涵盖五种语言。以下为 2.6.0 的历史结果：Release 编译、28 项安全自检（0 失败）和 55 项真实 WinUI 3 / WebView2 运行检查已完成，其中包括 7 项新增更新界面检查。具体覆盖与限制见 [验证记录](VALIDATION.md)；另已完成从 2.5.0 升级安装、471 个安装文件逐一核对、安装后 28 项自检及卸载检查。完整 6 小时检查周期和真实外部浏览器跳转仍未实测。
 
 运行包含 HTTPS 检查的开发冒烟测试 `--smoke-test` 需要本机安装 Node.js。程序优先读取 `WEBDISPLAY_TEST_NODE` 环境变量中指定的绝对 `node.exe` 路径，未设置时从 `PATH` 查找。该测试使用 Node 内置 HTTPS 在本机提供临时自签名服务，证书和私钥仅保存在内存中，不写入密钥文件或 Windows 信任库。正常使用、`--self-test` 和安装包均不依赖 Node.js。
 
@@ -245,7 +245,7 @@ XAML 编译器与 Windows 构建工具来自 NuGet；XAML 编译器需要 .NET F
 - 仅在可信的内部测试站点验证证书选项：默认关闭；更改并保存会重建会话、重新加载；关闭并保存后恢复校验，且原有配置和持久 cookies 保留。取消设置时不应改变证书策略。
 - 开启短间隔刷新并观察一次；关闭后确认不再定时刷新。
 - 验证置顶、全屏、快捷键以及托盘入口。
-- 检查窗口和全屏右下角的当前版本；点击版本号旁的“检查更新”按钮执行手动检查，确认重复点击受 1 分钟间隔及 API 限流等待限制。离线时网页继续展示。
+- 检查窗口模式右下角的当前版本；进入全屏后版本和更新区域应完全隐藏，退出全屏后恢复。点击版本号旁的“检查更新”按钮执行手动检查，确认重复点击受 1 分钟间隔及 API 限流等待限制。离线时网页继续展示。
 - 有较新的正式发布时，检查新版链接、五语文案、低频闪烁及系统关闭动画时的静态提示；点击应打开外部浏览器的官方发布页并停止本次闪烁，链接继续保留，不自动下载安装。
 - 依次预览跟随系统、浅色和深色主题；取消后恢复原主题，保存后重新打开仍保留选择。跟随系统时切换 Windows 配色，检查主窗口与设置窗口同步更新。
 - 对支持系统配色的网站验证网页主题切换；固定主题的网站无需被强制改色。
