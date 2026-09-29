@@ -1,10 +1,10 @@
-# WebDisplay 2.6.2
+# WebDisplay 2.6.3
 
 [简体中文](README.md) | **English**
 
 A Windows desktop app for keeping a website on a display screen. Built with C#, .NET 10, WinUI 3, and Microsoft Edge WebView2, WebDisplay supports full screen, automatic refresh and recovery, page zoom, and unattended display settings.
 
-Version **2.6.2** makes the bottom-right version area match the left status bar. It retains **Japanese and Korean**, added to the app and installer in **2.6.1**, alongside **Simplified Chinese, Traditional Chinese, and English**. It retains the version indicator and automatic/manual GitHub release checks introduced in **2.6.0**, along with page mute and the existing display controls.
+Version **2.6.3** replaces the app icon with a new user-provided design and retains the matching version-area and left status-bar styling introduced in **2.6.2**. It retains **Japanese and Korean**, added to the app and installer in **2.6.1**, alongside **Simplified Chinese, Traditional Chinese, and English**. It retains the version indicator and automatic/manual GitHub release checks introduced in **2.6.0**, along with page mute and the existing display controls.
 
 [Download the latest version](https://github.com/zc929/webdisplay/releases/latest) · [All releases](https://github.com/zc929/webdisplay/releases)
 
@@ -38,7 +38,7 @@ On first launch, WebDisplay opens Settings in Simplified Chinese. Page mute, cer
 
 ## Install and run
 
-Download **`WebDisplay-Setup-2.6.2-x64.exe`** from the [latest release](https://github.com/zc929/webdisplay/releases/latest). The installer supports Simplified Chinese, Traditional Chinese, English, Japanese, and Korean. You can choose the app's interface language separately after installation.
+Download **`WebDisplay-Setup-2.6.3-x64.exe`** from the [latest release](https://github.com/zc929/webdisplay/releases/latest). The installer supports Simplified Chinese, Traditional Chinese, English, Japanese, and Korean. You can choose the app's interface language separately after installation.
 
 The default installation is for the current Windows user, without requiring administrator rights to install WebDisplay itself:
 
@@ -183,7 +183,7 @@ Use `-SkipInstaller` to skip the installer. Build outputs are:
 | --- | --- |
 | Multi-file app | `dist\WebDisplay-WinUI3-win-x64\WebDisplay.exe` |
 | Portable ZIP | `dist\WebDisplay-WinUI3-win-x64.zip` |
-| Installer | `dist\WebDisplay-Setup-2.6.2-x64.exe` |
+| Installer | `dist\WebDisplay-Setup-2.6.3-x64.exe` |
 | Source ZIP | `dist\WebDisplay-WinUI3-source.zip` |
 | Source project | `src\WebDisplay\WebDisplay.csproj` |
 
@@ -209,4 +209,4 @@ The HTTPS smoke checks require a local Node.js installation. Set `WEBDISPLAY_TES
 
 The smoke test temporarily opens windows, requests and releases sleep prevention, and terminates and recreates its own test browser process. Run it in an interactive Windows session. Results and preview images are written to the test data directory.
 
-The 2.6.2 version-metadata correction passed recompilation and 28 self-checks, with the program version verified; see [the validation record](VALIDATION.md) for actual results. Version 2.6.1 previously passed Release compilation, 28 self-checks and 59 real runtime checks covering all five interface languages. The following results are historical: version 2.6.0 passed Release compilation, **28 self-checks with zero failures**, and **55 real WinUI 3 / WebView2 runtime checks**, including seven new update-interface checks. Coverage includes three languages, both themes, a narrow window, full screen, request overlap prevention, rate-limit scheduling, and release-link handling through an injected browser launcher. Separate installer checks passed an upgrade from 2.5.0, verified all 471 installed payload files, passed 28 installed self-checks, and confirmed uninstall completion. The full six-hour checking interval and a real external-browser launch remain untested. Windows animations were enabled during the run; the disabled-animation branch was reviewed but not exercised by changing the system setting. The 2.5.0 installation and uninstall records remain as history. See [the full validation record in Chinese](VALIDATION.md) for coverage and limitations. Audible output on the target device, administrator authorization, actual automatic sign-in and restarts, domain policy, website authentication, mixed-DPI monitors, missing-Runtime installation, and extended unattended operation still need validation in the deployment environment.
+For the 2.6.3 icon update, see [the validation record](VALIDATION.md) for the build, version, and icon-resource checks and the location of their results. The earlier 2.6.2 version-metadata correction passed recompilation and 28 self-checks, with the program version verified. Version 2.6.1 previously passed Release compilation, 28 self-checks and 59 real runtime checks covering all five interface languages. The following results are historical: version 2.6.0 passed Release compilation, **28 self-checks with zero failures**, and **55 real WinUI 3 / WebView2 runtime checks**, including seven new update-interface checks. Coverage includes three languages, both themes, a narrow window, full screen, request overlap prevention, rate-limit scheduling, and release-link handling through an injected browser launcher. Separate installer checks passed an upgrade from 2.5.0, verified all 471 installed payload files, passed 28 installed self-checks, and confirmed uninstall completion. The full six-hour checking interval and a real external-browser launch remain untested. Windows animations were enabled during the run; the disabled-animation branch was reviewed but not exercised by changing the system setting. The 2.5.0 installation and uninstall records remain as history. See [the full validation record in Chinese](VALIDATION.md) for coverage and limitations. Audible output on the target device, administrator authorization, actual automatic sign-in and restarts, domain policy, website authentication, mixed-DPI monitors, missing-Runtime installation, and extended unattended operation still need validation in the deployment environment.
